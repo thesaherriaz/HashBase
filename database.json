@@ -62,7 +62,7 @@
           "id": 1,
           "first_name": "John",
           "last_name": "Smith",
-          "department": "Engineering"
+          "department": "Sales"
         }
       },
       "constraints": {
@@ -73,7 +73,32 @@
     }
   },
   "indexes": {},
-  "activeTransactions": {},
+  "activeTransactions": {
+    "tx1": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "INSERT INTO employees VALUES (2, \"Jane\", \"Doe\", \"Marketing\")",
+          "timestamp": "2025-05-15T13:41:58.650Z"
+        }
+      ],
+      "locks": []
+    },
+    "tx2": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "UPDATE employees SET department = \"Sales\" WHERE id = 1",
+          "timestamp": "2025-05-15T13:42:15.906Z"
+        },
+        {
+          "query": "UPDATE employees SET department = \"Sales\" WHERE id = 1",
+          "timestamp": "2025-05-15T13:42:36.556Z"
+        }
+      ],
+      "locks": []
+    }
+  },
   "implicitTransactionCounter": 0,
   "accessControl": {
     "users": {
