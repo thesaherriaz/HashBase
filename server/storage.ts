@@ -460,6 +460,47 @@ export class MemStorage implements IStorage {
     return `Transaction ${transactionId} committed successfully.`;
   }
 
+  // List all transactions with their status
+  async listTransactions(): Promise<{id: string, status: string, locks: string[]}[]> {
+    const transactions = [];
+    
+    for (const id in this.database.activeTransactions) {
+      const tx = this.database.activeTransactions[id];
+      transactions.push({
+        id,
+        status: tx.status,
+        locks: tx.locks,
+        operations: tx.operations.length
+      });
+    }
+    
+    return transactions;
+  }
+  
+  // Forcibly terminate all active transactions
+  async terminateAllTransactions(): Promise<string> {
+    let terminatedCount = 0;
+    
+    for (const id in this.database.activeTransactions) {
+      const tx = this.database.activeTransactions[id];
+      if (tx.status === 'active') {
+        // Release locks
+        this.concurrencyManager.releaseLocks(id);
+        
+        // Set status to aborted
+        tx.status = 'aborted';
+        
+        // Clear locks
+        tx.locks = [];
+        
+        terminatedCount++;
+      }
+    }
+    
+    this.save();
+    return `Terminated ${terminatedCount} active transactions.`;
+  }
+  
   async rollbackTransaction(transactionId: string): Promise<string> {
     if (!this.database.activeTransactions[transactionId]) {
       return `Transaction ${transactionId} does not exist!`;

@@ -168,7 +168,7 @@
       "locks": []
     },
     "transaction_1747317344821": {
-      "status": "active",
+      "status": "aborted",
       "operations": [],
       "checkpoint": {
         "students": {
@@ -266,7 +266,7 @@
       "locks": []
     },
     "tx_alice": {
-      "status": "active",
+      "status": "aborted",
       "operations": [
         {
           "query": "UPDATE accounts SET balance = balance - 200 WHERE account_id = 1",
@@ -393,9 +393,410 @@
           "foreign_keys": {}
         }
       },
-      "locks": [
-        "accounts"
-      ]
+      "locks": []
+    },
+    "transaction_1747318210500": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "INSERT INTO students VALUES (1, 'Alice', 21)",
+          "timestamp": "2025-05-15T14:10:22.831Z"
+        }
+      ],
+      "locks": []
+    },
+    "transaction_1747318210501": {
+      "status": "aborted",
+      "operations": [
+        {
+          "query": "UPDATE students SET name='Saher' Where id=1\n",
+          "timestamp": "2025-05-15T14:11:48.640Z"
+        }
+      ],
+      "checkpoint": {
+        "students": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": [
+                "primary_key"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "constraints": []
+            },
+            "age": {
+              "type": "int",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "name": "Alice",
+              "age": 21
+            },
+            "2": {
+              "id": 2,
+              "name": "Jane",
+              "age": "Doe"
+            },
+            "3": {
+              "id": 3,
+              "name": "Kalsoom",
+              "age": 21
+            }
+          },
+          "constraints": {
+            "primaryKeys": [
+              "id"
+            ]
+          },
+          "primary_keys": [
+            "id"
+          ],
+          "foreign_keys": {}
+        },
+        "employees": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": []
+            },
+            "first_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "last_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "department": {
+              "type": "text",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "first_name": "John",
+              "last_name": "Smith",
+              "department": "Sales"
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        },
+        "accounts": {
+          "columns": {
+            "account_id": {
+              "type": "int",
+              "constraints": []
+            },
+            "account_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "balance": {
+              "type": "int",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(account_id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "account_id": 1,
+              "account_name": "Alice",
+              "balance": "balance - 200"
+            },
+            "2": {
+              "account_id": 2,
+              "account_name": "Bob",
+              "balance": 500
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        }
+      },
+      "locks": []
+    },
+    "transaction_1747318348054": {
+      "status": "aborted",
+      "operations": [
+        {
+          "query": "UPDATE students SET name = 'Saher' WHERE id = 1",
+          "timestamp": "2025-05-15T14:12:35.920Z"
+        },
+        {
+          "query": "UPDATE students SET name = 'Bob' WHERE id = 1",
+          "timestamp": "2025-05-15T14:12:56.929Z"
+        },
+        {
+          "query": "UPDATE students SET name = 'Bob' WHERE id = 2",
+          "timestamp": "2025-05-15T14:13:16.389Z"
+        }
+      ],
+      "checkpoint": {
+        "students": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": [
+                "primary_key"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "constraints": []
+            },
+            "age": {
+              "type": "int",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "name": "Alice",
+              "age": 21
+            },
+            "2": {
+              "id": 2,
+              "name": "Jane",
+              "age": "Doe"
+            },
+            "3": {
+              "id": 3,
+              "name": "Kalsoom",
+              "age": 21
+            }
+          },
+          "constraints": {
+            "primaryKeys": [
+              "id"
+            ]
+          },
+          "primary_keys": [
+            "id"
+          ],
+          "foreign_keys": {}
+        },
+        "employees": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": []
+            },
+            "first_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "last_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "department": {
+              "type": "text",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "first_name": "John",
+              "last_name": "Smith",
+              "department": "Sales"
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        },
+        "accounts": {
+          "columns": {
+            "account_id": {
+              "type": "int",
+              "constraints": []
+            },
+            "account_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "balance": {
+              "type": "int",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(account_id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "account_id": 1,
+              "account_name": "Alice",
+              "balance": "balance - 200"
+            },
+            "2": {
+              "account_id": 2,
+              "account_name": "Bob",
+              "balance": 500
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        }
+      },
+      "locks": []
+    },
+    "transaction_1747318412628": {
+      "status": "aborted",
+      "operations": [],
+      "checkpoint": {
+        "students": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": [
+                "primary_key"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "constraints": []
+            },
+            "age": {
+              "type": "int",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "name": "Alice",
+              "age": 21
+            },
+            "2": {
+              "id": 2,
+              "name": "Jane",
+              "age": "Doe"
+            },
+            "3": {
+              "id": 3,
+              "name": "Kalsoom",
+              "age": 21
+            }
+          },
+          "constraints": {
+            "primaryKeys": [
+              "id"
+            ]
+          },
+          "primary_keys": [
+            "id"
+          ],
+          "foreign_keys": {}
+        },
+        "employees": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": []
+            },
+            "first_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "last_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "department": {
+              "type": "text",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "first_name": "John",
+              "last_name": "Smith",
+              "department": "Sales"
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        },
+        "accounts": {
+          "columns": {
+            "account_id": {
+              "type": "int",
+              "constraints": []
+            },
+            "account_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "balance": {
+              "type": "int",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(account_id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "account_id": 1,
+              "account_name": "Alice",
+              "balance": "balance - 200"
+            },
+            "2": {
+              "account_id": 2,
+              "account_name": "Bob",
+              "balance": 500
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        }
+      },
+      "locks": []
     }
   },
   "implicitTransactionCounter": 0,

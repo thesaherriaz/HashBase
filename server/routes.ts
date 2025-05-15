@@ -400,6 +400,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Transaction operations
+  // Get list of all transactions
+  app.get("/api/transactions", async (req, res) => {
+    try {
+      const transactions = await storage.listTransactions();
+      res.json(transactions);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+  
+  // Terminate all active transactions
+  app.post("/api/transactions/terminate-all", async (req, res) => {
+    try {
+      const result = await storage.terminateAllTransactions();
+      res.json({ message: result });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+  
   // Begin a transaction
   app.post("/api/transactions/begin", async (req, res) => {
     try {
