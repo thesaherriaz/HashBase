@@ -20,7 +20,7 @@
       "records": {
         "1": {
           "id": 1,
-          "name": "Alice",
+          "name": "John",
           "age": 21
         },
         "2": {
@@ -32,6 +32,11 @@
           "id": 3,
           "name": "Mark",
           "age": 23
+        },
+        "5": {
+          "id": 5,
+          "name": "Aleena",
+          "age": 21
         }
       },
       "constraints": {},
@@ -45,7 +50,8 @@
     "students": {
       "age": {
         "21": [
-          "1"
+          "1",
+          "5"
         ],
         "22": [
           "2"
@@ -79,6 +85,7 @@
           "admin"
         ]
       }
-    }
+    },
+    "currentUser": "admin"
   }
 }
