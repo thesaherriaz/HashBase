@@ -225,6 +225,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
           });
         }
+        
+        // For sensitive DELETE operations, verify password
+        if (!isAdmin) {
+          const passwordValid = await storage.verifyPassword(password);
+          if (!passwordValid) {
+            return res.status(403).json({ 
+              message: "Access denied: Password verification failed for DELETE operation", 
+              executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+            });
+          }
+        }
 
         result = await storage.deleteRecords(tableName, whereClause);
       } else if (
@@ -300,6 +311,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
         
+        // For DROP TABLE operations, always verify password regardless of admin status
+        const passwordValid = await storage.verifyPassword(password);
+        if (!passwordValid) {
+          return res.status(403).json({ 
+            message: "Access denied: Password verification failed for DROP TABLE operation", 
+            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+          });
+        }
+        
         result = await storage.dropTable(tableName);
       } else {
         return res
@@ -326,12 +346,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Transaction operations
   app.post("/api/transactions/begin", async (req, res) => {
     try {
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
       const { transactionId } = req.body;
       if (!transactionId) {
-        return res.status(400).json({ message: "Transaction ID is required" });
+        return res.status(400).json({ 
+          message: "Transaction ID is required",
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+        });
       }
       const result = await storage.beginTransaction(transactionId);
-      res.json({ message: result });
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: result,
+        executionTime
+      });
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }
