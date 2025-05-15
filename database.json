@@ -18,10 +18,10 @@
         }
       },
       "records": {
-        "1": {
-          "id": 1,
-          "name": "Alice",
-          "age": 21
+        "2": {
+          "id": 2,
+          "name": "Jane",
+          "age": "Doe"
         }
       },
       "constraints": {
@@ -32,6 +32,43 @@
       "primary_keys": [
         "id"
       ],
+      "foreign_keys": {}
+    },
+    "employees": {
+      "columns": {
+        "id": {
+          "type": "int",
+          "constraints": []
+        },
+        "first_name": {
+          "type": "text",
+          "constraints": []
+        },
+        "last_name": {
+          "type": "text",
+          "constraints": []
+        },
+        "department": {
+          "type": "text",
+          "constraints": []
+        },
+        "primary": {
+          "type": "key(id",
+          "constraints": []
+        }
+      },
+      "records": {
+        "1": {
+          "id": 1,
+          "first_name": "John",
+          "last_name": "Smith",
+          "department": "Engineering"
+        }
+      },
+      "constraints": {
+        "primaryKeys": []
+      },
+      "primary_keys": [],
       "foreign_keys": {}
     }
   },
