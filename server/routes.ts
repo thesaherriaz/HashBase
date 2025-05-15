@@ -63,10 +63,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // SQL Query execution
   app.post("/api/query", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
-      // Start timer for execution time measurement
-      const startTime = process.hrtime();
-      
       const { query, password } = req.body;
       if (!query) {
         return res.status(400).json({ message: "Query is required" });
@@ -345,10 +345,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Transaction operations
   app.post("/api/transactions/begin", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
-      // Start timer for execution time measurement
-      const startTime = process.hrtime();
-      
       const { transactionId } = req.body;
       if (!transactionId) {
         return res.status(400).json({ 
@@ -574,9 +574,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Authentication operations
   app.post("/api/logout", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
-      // Start timer for execution time measurement
-      const startTime = process.hrtime();
       
       await storage.logoutUser();
       
@@ -594,9 +595,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.get("/api/user", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
-      // Start timer for execution time measurement
-      const startTime = process.hrtime();
       
       const user = await storage.getCurrentUser();
       
@@ -615,9 +617,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.post("/api/login", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
-      // Start timer for execution time measurement
-      const startTime = process.hrtime();
       
       const { username, password } = req.body;
       if (!username || !password) {
