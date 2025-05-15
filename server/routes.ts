@@ -64,10 +64,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // SQL Query execution
   app.post("/api/query", async (req, res) => {
     try {
-      const { query } = req.body;
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
+      const { query, password } = req.body;
       if (!query) {
         return res.status(400).json({ message: "Query is required" });
       }
+      
+      // Get current user from access control
+      const currentUser = await storage.getCurrentUser();
+      const isAdmin = currentUser?.role === 'admin';
 
       // Parse the query to determine what type it is
       const queryType = query.trim().split(" ")[0].toUpperCase();
@@ -150,6 +157,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const tableName = match[1];
         const setClause = match[2];
         const whereClause = match[3];
+        
+        // Check if user has write permission for this table
+        const hasPermission = await storage.hasTablePermission(tableName, 'write');
+        if (!hasPermission && !isAdmin) {
+          return res.status(403).json({ 
+            message: "Access denied: You don't have write permission for this table", 
+            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+          });
+        }
 
         // Parse SET clause
         const updates: Record<string, any> = {};
@@ -189,6 +205,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         const tableName = match[1];
         const whereClause = match[2];
+        
+        // Check if user has write permission for this table
+        const hasPermission = await storage.hasTablePermission(tableName, 'write');
+        if (!hasPermission && !isAdmin) {
+          return res.status(403).json({ 
+            message: "Access denied: You don't have write permission for this table", 
+            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+          });
+        }
 
         result = await storage.deleteRecords(tableName, whereClause);
       } else if (
@@ -254,6 +279,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         const tableName = match[1];
+        
+        // Check if user has admin permission for this table
+        const hasPermission = await storage.hasTablePermission(tableName, 'admin');
+        if (!hasPermission && !isAdmin) {
+          return res.status(403).json({ 
+            message: "Access denied: You don't have admin permission to drop this table", 
+            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+          });
+        }
+        
         result = await storage.dropTable(tableName);
       } else {
         return res
