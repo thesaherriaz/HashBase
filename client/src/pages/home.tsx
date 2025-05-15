@@ -3,10 +3,11 @@ import QueryTab from '@/components/QueryTab';
 import TransactionTab from '@/components/TransactionTab';
 import JoinTab from '@/components/JoinTab';
 import IndexerTab from '@/components/IndexerTab';
+import ArchitectureTab from '@/components/ArchitectureTab';
 import AccountDropdown from '@/components/AccountDropdown';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
 
-type Tab = 'query' | 'transaction' | 'join' | 'indexer';
+type Tab = 'query' | 'transaction' | 'join' | 'indexer' | 'architecture';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('query');
@@ -56,6 +57,13 @@ export default function Home() {
               >
                 Indexer
               </button>
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'architecture' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('architecture')}
+              >
+                Architecture
+              </button>
             </nav>
             
             {/* Auth */}
@@ -96,6 +104,13 @@ export default function Home() {
           >
             Index
           </button>
+          <button 
+            className={`tab py-2 px-4 rounded-t-lg font-medium text-sm
+              ${activeTab === 'architecture' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
+            onClick={() => setActiveTab('architecture')}
+          >
+            Arch
+          </button>
         </div>
         
         {/* Tab content */}
@@ -104,6 +119,7 @@ export default function Home() {
           {activeTab === 'transaction' && <TransactionTab onStatusChange={setStatusMessage} />}
           {activeTab === 'join' && <JoinTab onStatusChange={setStatusMessage} />}
           {activeTab === 'indexer' && <IndexerTab onStatusChange={setStatusMessage} />}
+          {activeTab === 'architecture' && <ArchitectureTab onStatusChange={setStatusMessage} />}
         </div>
       </main>
       
