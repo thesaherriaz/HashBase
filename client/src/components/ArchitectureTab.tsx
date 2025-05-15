@@ -219,66 +219,102 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                 <svg width="100%" height="480" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
                   {/* Client Side */}
                   <rect x="50" y="50" width="700" height="400" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="2"/>
-                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">Hash-based DBMS Architecture</text>
+                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">HashBase DBMS Architecture</text>
                   
                   {/* Frontend Section */}
                   <rect x="100" y="100" width="250" height="300" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2"/>
-                  <text x="225" y="130" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Client Interface</text>
+                  <text x="225" y="130" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">React Client Interface</text>
                   
                   {/* UI Components */}
-                  <rect x="125" y="150" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="225" y="175" textAnchor="middle" fill="#0f172a" fontSize="12">UI Components</text>
+                  <rect x="125" y="150" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="172.5" y="175" textAnchor="middle" fill="#0f172a" fontSize="12">Query Editor</text>
+                  
+                  <rect x="230" y="150" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="277.5" y="175" textAnchor="middle" fill="#0f172a" fontSize="12">Transaction UI</text>
                   
                   {/* State Management */}
                   <rect x="125" y="200" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="225" y="225" textAnchor="middle" fill="#0f172a" fontSize="12">State Management</text>
+                  <text x="225" y="225" textAnchor="middle" fill="#0f172a" fontSize="12">React Query State</text>
                   
                   {/* API Clients */}
-                  <rect x="125" y="250" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="225" y="275" textAnchor="middle" fill="#0f172a" fontSize="12">API Clients</text>
+                  <rect x="125" y="250" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="172.5" y="275" textAnchor="middle" fill="#0f172a" fontSize="12">Database API</text>
                   
-                  {/* Validation */}
-                  <rect x="125" y="300" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="225" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">Form Validation</text>
+                  <rect x="230" y="250" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="277.5" y="275" textAnchor="middle" fill="#0f172a" fontSize="12">Auth API</text>
+                  
+                  {/* New Features */}
+                  <rect x="125" y="300" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="172.5" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">Execution Timer</text>
+                  
+                  <rect x="230" y="300" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="277.5" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">Lock Visualizer</text>
                   
                   {/* Backend Section */}
                   <rect x="450" y="100" width="250" height="300" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2"/>
-                  <text x="575" y="130" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Server Backend</text>
+                  <text x="575" y="130" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Node.js Backend</text>
                   
                   {/* API Routes */}
                   <rect x="475" y="150" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="575" y="175" textAnchor="middle" fill="#0f172a" fontSize="12">API Routes</text>
+                  <text x="575" y="175" textAnchor="middle" fill="#0f172a" fontSize="12">Express REST API</text>
                   
                   {/* Storage Interface */}
                   <rect x="475" y="200" width="200" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="575" y="225" textAnchor="middle" fill="#0f172a" fontSize="12">Storage Interface</text>
+                  <text x="575" y="225" textAnchor="middle" fill="#0f172a" fontSize="12">IStorage Interface</text>
                   
                   {/* Core DBMS Engine */}
-                  <rect x="475" y="250" width="200" height="40" rx="4" fill="#94a3b8" stroke="#64748b" strokeWidth="1"/>
-                  <text x="575" y="275" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Hash-based DBMS Engine</text>
+                  <rect x="475" y="250" width="95" height="40" rx="4" fill="#94a3b8" stroke="#64748b" strokeWidth="1"/>
+                  <text x="522.5" y="275" textAnchor="middle" fill="#0f172a" fontSize="12">SQL Engine</text>
+                  
+                  <rect x="580" y="250" width="95" height="40" rx="4" fill="#94a3b8" stroke="#64748b" strokeWidth="1"/>
+                  <text x="627.5" y="275" textAnchor="middle" fill="#0f172a" fontSize="12">Transaction Mgr</text>
                   
                   {/* Storage */}
                   <rect x="475" y="300" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
-                  <text x="522.5" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">JSON Files</text>
+                  <text x="522.5" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">JSON Storage</text>
                   
                   {/* PostgreSQL */}
                   <rect x="580" y="300" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
                   <text x="627.5" y="325" textAnchor="middle" fill="#0f172a" fontSize="12">PostgreSQL</text>
                   
+                  {/* New Backend Features */}
+                  <rect x="475" y="350" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="522.5" y="375" textAnchor="middle" fill="#0f172a" fontSize="12">Performance Monitor</text>
+                  
+                  <rect x="580" y="350" width="95" height="40" rx="4" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="627.5" y="375" textAnchor="middle" fill="#0f172a" fontSize="12">Access Control</text>
+                  
                   {/* Connection Lines */}
                   <line x1="325" y1="170" x2="475" y2="170" stroke="#64748b" strokeWidth="2" strokeDasharray="5,5"/>
                   <line x1="325" y1="270" x2="475" y2="270" stroke="#64748b" strokeWidth="2" strokeDasharray="5,5"/>
+                  <line x1="325" y1="320" x2="475" y2="370" stroke="#64748b" strokeWidth="2" strokeDasharray="5,5"/>
                   <line x1="575" y1="190" x2="575" y2="200" stroke="#64748b" strokeWidth="2"/>
-                  <line x1="575" y1="240" x2="575" y2="250" stroke="#64748b" strokeWidth="2"/>
-                  <line x1="575" y1="290" x2="575" y2="300" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="575" y1="240" x2="522.5" y2="250" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="575" y1="240" x2="627.5" y2="250" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="522.5" y1="290" x2="522.5" y2="300" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="627.5" y1="290" x2="627.5" y2="300" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="522.5" y1="340" x2="522.5" y2="350" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="627.5" y1="340" x2="627.5" y2="350" stroke="#64748b" strokeWidth="2"/>
                   
                   {/* Arrows */}
                   <polygon points="470,170 475,170 475,165 485,170 475,175 475,170" fill="#64748b"/>
                   <polygon points="470,270 475,270 475,265 485,270 475,275 475,270" fill="#64748b"/>
+                  <polygon points="470,370 475,370 475,365 485,370 475,375 475,370" fill="#64748b"/>
+                  
+                  {/* Legend */}
+                  <rect x="65" y="410" width="30" height="15" rx="2" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="105" y="422" textAnchor="start" fill="#0f172a" fontSize="10">Component</text>
+                  
+                  <rect x="165" y="410" width="30" height="15" rx="2" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="205" y="422" textAnchor="start" fill="#0f172a" fontSize="10">New Feature</text>
+                  
+                  <line x1="265" y1="417" x2="285" y2="417" stroke="#64748b" strokeWidth="2" strokeDasharray="5,5"/>
+                  <text x="315" y="422" textAnchor="start" fill="#0f172a" fontSize="10">API Connection</text>
                 </svg>
                 <p className="text-sm text-muted-foreground mt-4">
-                  The system architecture shows the client-side interface communicating with the server-side hash-based DBMS engine.
-                  Data persistence is handled through both JSON files for the database content and PostgreSQL for user management.
+                  This updated system architecture shows the React-based client interface communicating with the Node.js backend.
+                  New features include execution time measurement, transaction lock visualization, performance monitoring, and enhanced
+                  access control with password verification for sensitive operations.
                 </p>
               </div>
             </CardContent>
