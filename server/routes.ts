@@ -91,7 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const tableName = match[1];
         const valuesStr = match[2];
-        const values = valuesStr.split(',').map(val => {
+        const values = valuesStr.split(',').map((val: string) => {
           val = val.trim();
           if ((val.startsWith("'") && val.endsWith("'")) || 
               (val.startsWith('"') && val.endsWith('"'))) {
@@ -135,10 +135,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Parse SET clause
         const updates: Record<string, any> = {};
-        const setParts = setClause.split(',').map(part => part.trim());
+        const setParts = setClause.split(',').map((part: string) => part.trim());
         
         for (const part of setParts) {
-          const [column, valuePart] = part.split('=').map(p => p.trim());
+          const [column, valuePart] = part.split('=').map((p: string) => p.trim());
           
           let value = valuePart;
           if ((value.startsWith("'") && value.endsWith("'")) || 
@@ -174,13 +174,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         const tableName = match[1];
-        const columnDefs = match[2].split(',').map(col => col.trim());
+        const columnDefs = match[2].split(',').map((col: string) => col.trim());
         const constraintStr = match[3] || '';
         
         // Parse columns
         const columns: Record<string, any> = {};
         for (const colDef of columnDefs) {
-          const [colName, colType] = colDef.split(' ').map(part => part.trim());
+          const [colName, colType] = colDef.split(' ').map((part: string) => part.trim());
           columns[colName.toLowerCase()] = {
             type: colType.toLowerCase(),
             constraints: []
@@ -192,7 +192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let primaryKeys: string[] = [];
         
         if (constraintStr) {
-          const constraintParts = constraintStr.split(',').map(c => c.trim());
+          const constraintParts = constraintStr.split(',').map((c: string) => c.trim());
           for (const constraint of constraintParts) {
             if (constraint.toUpperCase().includes('PRIMARY_KEY')) {
               const pkCol = constraint.split(' ')[0].trim().toLowerCase();
@@ -341,6 +341,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const result = await storage.joinTables(table1, table2, joinColumn1, joinColumn2, columns);
       res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+
+  // Transaction operations
+  // Begin a transaction
+  app.post('/api/transactions/begin', async (req, res) => {
+    try {
+      const { transactionId } = req.body;
+      if (!transactionId) {
+        return res.status(400).json({ message: 'Transaction ID is required' });
+      }
+      
+      const result = await storage.beginTransaction(transactionId);
+      res.json({ message: result });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+
+  // Commit a transaction
+  app.post('/api/transactions/commit', async (req, res) => {
+    try {
+      const { transactionId } = req.body;
+      if (!transactionId) {
+        return res.status(400).json({ message: 'Transaction ID is required' });
+      }
+      
+      const result = await storage.commitTransaction(transactionId);
+      res.json({ message: result });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+
+  // Rollback a transaction
+  app.post('/api/transactions/rollback', async (req, res) => {
+    try {
+      const { transactionId } = req.body;
+      if (!transactionId) {
+        return res.status(400).json({ message: 'Transaction ID is required' });
+      }
+      
+      const result = await storage.rollbackTransaction(transactionId);
+      res.json({ message: result });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+
+  // Execute a query in a transaction
+  app.post('/api/transactions/execute', async (req, res) => {
+    try {
+      const { transactionId, query } = req.body;
+      if (!transactionId || !query) {
+        return res.status(400).json({ message: 'Transaction ID and query are required' });
+      }
+      
+      const result = await storage.executeInTransaction(transactionId, query);
+      res.json({ message: result });
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }
