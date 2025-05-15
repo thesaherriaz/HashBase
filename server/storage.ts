@@ -49,6 +49,8 @@ export interface IStorage {
   createUser(username: string, password: string, role: string): Promise<User | null>;
   getCurrentUser(): Promise<User | null>;
   logoutUser(): Promise<void>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   
   // Permission operations
   grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string>;
@@ -888,6 +890,20 @@ export class MemStorage implements IStorage {
   
   async logoutUser(): Promise<void> {
     return this.accessManager.logoutUser();
+  }
+  
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const users = this.database.accessControl.users;
+    for (const userId in users) {
+      if (users[userId].username === username) {
+        return users[userId];
+      }
+    }
+    return undefined;
+  }
+
+  async getUser(id: string): Promise<User | undefined> {
+    return this.database.accessControl.users[id];
   }
   
   async grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string> {

@@ -5,7 +5,7 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User } from "@shared/schema";
+import { User as SchemaUser } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { users } from "@shared/schema";
@@ -14,7 +14,7 @@ import { pool } from "./db";
 
 declare global {
   namespace Express {
-    interface User extends User {}
+    interface User extends SchemaUser {}
   }
 }
 
