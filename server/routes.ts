@@ -572,6 +572,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Permission operations
+  app.post("/api/permissions/grant", async (req, res) => {
+    try {
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
+      const { tableName, userId, permission, password } = req.body;
+      if (!tableName || !userId || !permission) {
+        return res.status(400).json({ 
+          message: "Table name, user ID and permission are required",
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+        });
+      }
+      
+      // Verify password for sensitive operation
+      const passwordValid = await storage.verifyPassword(password);
+      const currentUser = await storage.getCurrentUser();
+      const isAdmin = currentUser?.role === 'admin';
+      
+      if (!passwordValid && !isAdmin) {
+        return res.status(403).json({ 
+          message: "Access denied: Password verification failed for permission operation", 
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+        });
+      }
+      
+      const result = await storage.grantTablePermission(tableName, userId, permission as 'read' | 'write' | 'admin');
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: result,
+        executionTime
+      });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
