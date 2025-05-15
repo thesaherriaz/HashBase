@@ -8,7 +8,7 @@ interface ArchitectureTabProps {
 }
 
 export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps) {
-  const [activeView, setActiveView] = useState<string>('handdrawn');
+  const [activeView, setActiveView] = useState<string>('comprehensive');
   
   useEffect(() => {
     onStatusChange('Viewing system architecture');
@@ -16,13 +16,212 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
 
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="handdrawn" className="w-full" value={activeView} onValueChange={setActiveView}>
-        <TabsList className="grid grid-cols-4 mb-6">
-          <TabsTrigger value="handdrawn">Hand-Drawn Diagram</TabsTrigger>
-          <TabsTrigger value="system">System Architecture</TabsTrigger>
-          <TabsTrigger value="components">Component Diagram</TabsTrigger>
+      <Tabs defaultValue="comprehensive" className="w-full" value={activeView} onValueChange={setActiveView}>
+        <TabsList className="grid grid-cols-5 mb-6">
+          <TabsTrigger value="comprehensive" className="font-bold text-primary">Complete System View</TabsTrigger>
+          <TabsTrigger value="handdrawn">Hand-Drawn</TabsTrigger>
+          <TabsTrigger value="system">System</TabsTrigger>
+          <TabsTrigger value="components">Components</TabsTrigger>
           <TabsTrigger value="data">Data Flow</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="comprehensive" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Comprehensive HashBase DBMS Architecture</CardTitle>
+              <CardDescription>
+                Unified view of the entire system showing all components, relationships, data flow, and architectural layers
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full overflow-auto">
+                <svg width="1000" height="700" viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="grid-comprehensive" width="10" height="10" patternUnits="userSpaceOnUse">
+                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#f1f5f9" strokeWidth="0.5"/>
+                    </pattern>
+                    <marker id="arrowhead-comp" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                    </marker>
+                    <linearGradient id="client-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#e2e8f0" />
+                      <stop offset="100%" stopColor="#cbd5e1" />
+                    </linearGradient>
+                    <linearGradient id="server-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#cbd5e1" />
+                      <stop offset="100%" stopColor="#94a3b8" />
+                    </linearGradient>
+                    <linearGradient id="data-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#94a3b8" />
+                      <stop offset="100%" stopColor="#64748b" />
+                    </linearGradient>
+                  </defs>
+                  
+                  {/* Background Grid */}
+                  <rect x="0" y="0" width="1000" height="700" fill="url(#grid-comprehensive)" />
+                  
+                  {/* Title */}
+                  <text x="500" y="30" textAnchor="middle" fontSize="24" fontWeight="bold" fill="#0f172a">
+                    HashBase DBMS - Complete System Overview
+                  </text>
+                  
+                  {/* Main Layers */}
+                  <rect x="100" y="60" width="800" height="160" fill="url(#client-gradient)" rx="10" stroke="#64748b" strokeWidth="2"/>
+                  <text x="150" y="85" textAnchor="start" fontSize="18" fontWeight="bold" fill="#0f172a">Client Layer (React)</text>
+                  
+                  <rect x="100" y="240" width="800" height="180" fill="url(#server-gradient)" rx="10" stroke="#64748b" strokeWidth="2"/>
+                  <text x="150" y="265" textAnchor="start" fontSize="18" fontWeight="bold" fill="#0f172a">Server Layer (Node.js)</text>
+                  
+                  <rect x="100" y="440" width="800" height="160" fill="url(#data-gradient)" rx="10" stroke="#64748b" strokeWidth="2"/>
+                  <text x="150" y="465" textAnchor="start" fontSize="18" fontWeight="bold" fill="#f8fafc">Data Layer</text>
+                  
+                  {/* Client Layer Components */}
+                  <rect x="150" y="100" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="205" y="130" textAnchor="middle" fontSize="14" fontWeight="bold">UI Components</text>
+                  
+                  <rect x="300" y="100" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="355" y="130" textAnchor="middle" fontSize="14" fontWeight="bold">Query Editor</text>
+                  
+                  <rect x="450" y="100" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="505" y="130" textAnchor="middle" fontSize="14" fontWeight="bold">Result Display</text>
+                  
+                  <rect x="600" y="100" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="655" y="120" textAnchor="middle" fontSize="14" fontWeight="bold">Transaction</text>
+                  <text x="655" y="140" textAnchor="middle" fontSize="14" fontWeight="bold">Monitor</text>
+                  
+                  <rect x="750" y="100" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="805" y="130" textAnchor="middle" fontSize="14" fontWeight="bold">Authentication</text>
+                  
+                  <line x1="205" y1="150" x2="205" y2="180" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="355" y1="150" x2="355" y2="180" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="505" y1="150" x2="505" y2="180" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="655" y1="150" x2="655" y2="180" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="805" y1="150" x2="805" y2="180" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  
+                  <rect x="150" y="180" width="710" height="20" rx="5" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="505" y="194" textAnchor="middle" fontSize="14" fontWeight="bold">REST API Interface</text>
+                  
+                  {/* Server Layer Components */}
+                  <rect x="150" y="280" width="120" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="210" y="305" textAnchor="middle" fontSize="14" fontWeight="bold">API Routes</text>
+                  <text x="210" y="325" textAnchor="middle" fontSize="12">Express.js</text>
+                  
+                  <rect x="310" y="280" width="120" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="370" y="305" textAnchor="middle" fontSize="14" fontWeight="bold">SQL Parser</text>
+                  <text x="370" y="325" textAnchor="middle" fontSize="12">AST Generation</text>
+                  
+                  <rect x="470" y="280" width="120" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="530" y="305" textAnchor="middle" fontSize="14" fontWeight="bold">Query Executor</text>
+                  <text x="530" y="325" textAnchor="middle" fontSize="12">Operations</text>
+                  
+                  <rect x="150" y="350" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="205" y="380" textAnchor="middle" fontSize="14" fontWeight="bold">Access Control</text>
+                  
+                  <rect x="270" y="350" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="325" y="370" textAnchor="middle" fontSize="14" fontWeight="bold">Transaction</text>
+                  <text x="325" y="390" textAnchor="middle" fontSize="14" fontWeight="bold">Manager</text>
+                  
+                  <rect x="390" y="350" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="445" y="380" textAnchor="middle" fontSize="14" fontWeight="bold">Lock Manager</text>
+                  
+                  <rect x="510" y="350" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="565" y="380" textAnchor="middle" fontSize="14" fontWeight="bold">Execution Timer</text>
+                  
+                  <rect x="630" y="350" width="110" height="50" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="685" y="380" textAnchor="middle" fontSize="14" fontWeight="bold">Query Cache</text>
+                  
+                  <rect x="750" y="280" width="120" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="810" y="305" textAnchor="middle" fontSize="14" fontWeight="bold">Auth Service</text>
+                  <text x="810" y="325" textAnchor="middle" fontSize="12">PostgreSQL</text>
+                  
+                  {/* Line from API Routes to other server components */}
+                  <line x1="210" y1="340" x2="210" y2="350" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="270" y1="310" x2="310" y2="310" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="430" y1="310" x2="470" y2="310" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="530" y1="340" x2="530" y2="350" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="590" y1="310" x2="750" y2="310" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <path d="M 325 350 L 325 330 L 370 330" fill="none" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="380" y1="375" x2="390" y2="375" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <path d="M 445 350 L 445 330 L 505 330" fill="none" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="445" y1="400" x2="445" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="565" y1="400" x2="565" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="210" y1="400" x2="210" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="325" y1="400" x2="325" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="685" y1="400" x2="685" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="810" y1="340" x2="810" y2="440" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  
+                  {/* Data Layer Components */}
+                  <rect x="150" y="480" width="130" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="215" y="510" textAnchor="middle" fontSize="14" fontWeight="bold">Hashbased Storage</text>
+                  <text x="215" y="530" textAnchor="middle" fontSize="12">JSON Records</text>
+                  
+                  <rect x="310" y="480" width="130" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="375" y="510" textAnchor="middle" fontSize="14" fontWeight="bold">Index Manager</text>
+                  <text x="375" y="530" textAnchor="middle" fontSize="12">Multi-column Indexing</text>
+                  
+                  <rect x="470" y="480" width="130" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="535" y="510" textAnchor="middle" fontSize="14" fontWeight="bold">Transaction Store</text>
+                  <text x="535" y="530" textAnchor="middle" fontSize="12">Active Transactions</text>
+                  
+                  <rect x="630" y="480" width="130" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="695" y="510" textAnchor="middle" fontSize="14" fontWeight="bold">PostgreSQL</text>
+                  <text x="695" y="530" textAnchor="middle" fontSize="12">User Authentication</text>
+                  
+                  <rect x="770" y="480" width="80" height="60" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="810" y="510" textAnchor="middle" fontSize="14" fontWeight="bold">File I/O</text>
+                  <text x="810" y="530" textAnchor="middle" fontSize="12">Persistence</text>
+                  
+                  {/* Database Files */}
+                  <rect x="190" y="570" width="60" height="30" rx="4" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="220" y="590" textAnchor="middle" fontSize="10">database.json</text>
+                  
+                  <rect x="370" y="570" width="60" height="30" rx="4" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="400" y="590" textAnchor="middle" fontSize="10">indexes.json</text>
+                  
+                  <rect x="550" y="570" width="60" height="30" rx="4" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="580" y="590" textAnchor="middle" fontSize="10">txn-log.json</text>
+                  
+                  <rect x="730" y="570" width="60" height="30" rx="4" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="760" y="590" textAnchor="middle" fontSize="10">users.pg</text>
+                  
+                  <line x1="220" y1="540" x2="220" y2="570" stroke="#64748b" strokeWidth="1" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="400" y1="540" x2="400" y2="570" stroke="#64748b" strokeWidth="1" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="580" y1="540" x2="580" y2="570" stroke="#64748b" strokeWidth="1" markerEnd="url(#arrowhead-comp)"/>
+                  <line x1="760" y1="540" x2="760" y2="570" stroke="#64748b" strokeWidth="1" markerEnd="url(#arrowhead-comp)"/>
+                  
+                  {/* Legend */}
+                  <rect x="100" y="620" width="20" height="15" rx="3" fill="#f8fafc" stroke="#64748b" strokeWidth="1"/>
+                  <text x="130" y="632" textAnchor="start" fontSize="12">Component</text>
+                  
+                  <rect x="220" y="620" width="20" height="15" rx="3" fill="#f8fafc" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="250" y="632" textAnchor="start" fontSize="12">Future Enhancement</text>
+                  
+                  <line x1="340" y1="628" x2="370" y2="628" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrowhead-comp)"/>
+                  <text x="415" y="632" textAnchor="start" fontSize="12">Data Flow</text>
+                  
+                  <rect x="470" y="620" width="20" height="15" rx="3" fill="url(#client-gradient)" stroke="#64748b" strokeWidth="1"/>
+                  <text x="500" y="632" textAnchor="start" fontSize="12">Client Layer</text>
+                  
+                  <rect x="590" y="620" width="20" height="15" rx="3" fill="url(#server-gradient)" stroke="#64748b" strokeWidth="1"/>
+                  <text x="620" y="632" textAnchor="start" fontSize="12">Server Layer</text>
+                  
+                  <rect x="710" y="620" width="20" height="15" rx="3" fill="url(#data-gradient)" stroke="#64748b" strokeWidth="1"/>
+                  <text x="740" y="632" textAnchor="start" fontSize="12">Data Layer</text>
+                </svg>
+                
+                <p className="text-sm text-muted-foreground mt-4 px-4">
+                  This comprehensive diagram unifies all architectural views of HashBase DBMS into a single visualization. 
+                  It shows the three primary layers (Client, Server, Data) and how they interconnect. 
+                  All major components are represented including the SQL Parser, Query Executor, Transaction Manager,
+                  Lock Manager for concurrency control, Access Control for authentication and authorization,
+                  and the new Execution Timer that measures query performance. 
+                  The diagram also illustrates both storage mechanisms: JSON-based hashmap storage for the core database
+                  and PostgreSQL for user authentication.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         <TabsContent value="handdrawn" className="space-y-4">
           <Card>
