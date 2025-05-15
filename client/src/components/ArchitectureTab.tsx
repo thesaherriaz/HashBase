@@ -59,25 +59,27 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   <path d="M 560 280 L 560 310 L 580 330" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
                   <text x="580" y="340" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">Optimizes execution plan</text>
                   
-                  {/* Finite State Machine */}
-                  <polygon points="450,320 480,290 550,290 580,320 550,350 480,350" fill="#fdf6e3" stroke="#d33682" strokeWidth="2" />
-                  <text x="515" y="330" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Finite State Machine</text>
+                  {/* Execution Time Tracker */}
+                  <rect x="440" y="160" width="120" height="30" rx="8" ry="8" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
+                  <text x="500" y="180" textAnchor="middle" fontFamily="cursive" fontSize="12" fill="#586e75">Execution Timer</text>
                   
-                  {/* Hash Indexer */}
+                  {/* Composite Indexer */}
                   <rect x="330" y="320" width="90" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#cb4b16" strokeWidth="2" />
-                  <text x="375" y="350" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Hash Indexer</text>
+                  <text x="375" y="340" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Composite</text>
+                  <text x="375" y="358" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Indexer</text>
                   <path d="M 375 370 L 375 400 L 355 420" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
-                  <text x="355" y="430" textAnchor="end" fontFamily="cursive" fontSize="10" fill="#586e75">Maintains hash indexes</text>
+                  <text x="355" y="430" textAnchor="end" fontFamily="cursive" fontSize="10" fill="#586e75">Multi-column indexing</text>
                   
                   {/* Transaction Manager */}
                   <rect x="580" y="320" width="120" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#2aa198" strokeWidth="2" />
-                  <text x="640" y="350" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Transaction Manager</text>
+                  <text x="640" y="340" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Transaction</text>
+                  <text x="640" y="358" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Manager</text>
                   <path d="M 640 370 L 640 400 L 670 420" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
-                  <text x="670" y="430" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">Handles ACID properties</text>
+                  <text x="670" y="430" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">ACID + Lock Mgmt</text>
                   
-                  {/* WAL Manager */}
-                  <rect x="500" y="390" width="100" height="40" rx="10" ry="10" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
-                  <text x="550" y="415" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">WAL Manager</text>
+                  {/* Concurrency Manager */}
+                  <rect x="500" y="360" width="100" height="40" rx="10" ry="10" fill="#fdf6e3" stroke="#2aa198" strokeWidth="2" />
+                  <text x="550" y="385" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Concurrency Mgr</text>
                   
                   {/* Storage Layer */}
                   <rect x="250" y="460" width="500" height="40" rx="10" ry="10" fill="#fdf6e3" stroke="#6c71c4" strokeWidth="2" />
@@ -97,7 +99,7 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   
                   {/* User Interface */}
                   <path d="M 650,550 Q 680,570 710,550 Q 710,590 680,610 Q 650,590 650,550 Z" fill="#fdf6e3" stroke="#cb4b16" strokeWidth="2" />
-                  <text x="680" y="585" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Web UI</text>
+                  <text x="680" y="585" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">React UI</text>
                   
                   {/* Client */}
                   <circle cx="100" cy="300" r="60" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
@@ -109,7 +111,9 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   
                   {/* Access Control */}
                   <polygon points="150,380 200,380 225,420 175,460 125,420" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
-                  <text x="175" y="425" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Access Control</text>
+                  <text x="175" y="410" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Access</text>
+                  <text x="175" y="430" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Control</text>
+                  <text x="175" y="450" textAnchor="middle" fontFamily="cursive" fontSize="10" fill="#586e75">Password Verification</text>
                   
                   {/* Connection Lines */}
                   <path d="M 160,300 L 200,300" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="5,3" />
@@ -131,13 +135,19 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   <path d="M 340,520 L 340,500" fill="none" stroke="#586e75" strokeWidth="2" />
                   <path d="M 680,550 L 680,500" fill="none" stroke="#586e75" strokeWidth="2" />
                   
+                  {/* Transaction Monitor */}
+                  <rect x="700" y="320" width="100" height="60" rx="8" ry="8" fill="#fdf6e3" stroke="#2aa198" strokeWidth="2" />
+                  <text x="750" y="345" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Transaction</text>
+                  <text x="750" y="365" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Monitor</text>
+                  <path d="M 700 350 L 640 350" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
+                  
                   {/* Arrows */}
                   <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
                     <polygon points="0 0, 5 2.5, 0 5" fill="#586e75" />
                   </marker>
                   
                   {/* Legend */}
-                  <rect x="800" y="100" width="150" height="200" fill="#fdf6e3" stroke="#93a1a1" strokeWidth="2" rx="5" ry="5" />
+                  <rect x="800" y="100" width="150" height="220" fill="#fdf6e3" stroke="#93a1a1" strokeWidth="2" rx="5" ry="5" />
                   <text x="875" y="120" textAnchor="middle" fontFamily="cursive" fontSize="14" fontWeight="bold" fill="#586e75">Legend</text>
                   
                   <rect x="820" y="140" width="15" height="15" fill="#fdf6e3" stroke="#268bd2" strokeWidth="2" />
@@ -154,6 +164,9 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   
                   <rect x="820" y="260" width="15" height="15" fill="#fdf6e3" stroke="#6c71c4" strokeWidth="2" />
                   <text x="845" y="272" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">API/Storage</text>
+                  
+                  <rect x="820" y="290" width="15" height="15" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" strokeDasharray="4,2" />
+                  <text x="845" y="302" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">New Features</text>
                 </svg>
                 
                 <div className="text-sm text-muted-foreground mt-6 space-y-3 max-w-3xl">
