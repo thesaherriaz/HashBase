@@ -314,12 +314,12 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
           >
             {showTransactionInfo ? (
               <>
-                <MaterialSymbol icon="visibility_off" className="mr-2" size="18px" />
+                <MaterialSymbol icon="visibility_off" className="mr-2" size="20px" />
                 Hide Active Transactions
               </>
             ) : (
               <>
-                <MaterialSymbol icon="visibility" className="mr-2" size="18px" />
+                <MaterialSymbol icon="visibility" className="mr-2" size="20px" />
                 Show Active Transactions
               </>
             )}
@@ -338,7 +338,7 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
                   className="h-7 w-7"
                   title="Refresh"
                 >
-                  <MaterialSymbol icon="refresh" size="18px" />
+                  <MaterialSymbol icon="refresh" size="20px" />
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -386,7 +386,7 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
                               <MaterialSymbol 
                                 icon={lock.includes('write') ? "lock" : "lock_open"} 
                                 className={lock.includes('write') ? "text-red-500 mr-1" : "text-green-500 mr-1"} 
-                                size="14px" 
+                                size="20px" 
                               />
                               {lock}
                             </div>

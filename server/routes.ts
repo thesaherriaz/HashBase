@@ -375,28 +375,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/transactions/commit", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
       const { transactionId } = req.body;
       if (!transactionId) {
-        return res.status(400).json({ message: "Transaction ID is required" });
+        return res.status(400).json({ 
+          message: "Transaction ID is required",
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+        });
       }
       const result = await storage.commitTransaction(transactionId);
-      res.json({ message: result });
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: result,
+        executionTime
+      });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      // Calculate execution time even for errors
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      res.status(500).json({ error: (error as Error).message, executionTime });
     }
   });
 
   app.post("/api/transactions/rollback", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
       const { transactionId } = req.body;
       if (!transactionId) {
-        return res.status(400).json({ message: "Transaction ID is required" });
+        return res.status(400).json({ 
+          message: "Transaction ID is required",
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+        });
       }
       const result = await storage.rollbackTransaction(transactionId);
-      res.json({ message: result });
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: result,
+        executionTime
+      });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      // Calculate execution time even for errors
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      res.status(500).json({ error: (error as Error).message, executionTime });
     }
   });
 
@@ -497,7 +531,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/transactions", async (req, res) => {
     try {
       const transactions = await storage.listTransactions();
-      res.json(transactions);
+      // Format the transaction information for the frontend
+      const formattedTransactions = transactions.map(tx => ({
+        transactionId: tx.id,
+        status: tx.status,
+        locks: tx.locks || []
+      }));
+      res.json({ transactions: formattedTransactions });
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }
