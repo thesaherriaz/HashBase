@@ -14,8 +14,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-card shadow-md border-b border-border">
+      {/* Header - Fixed at the top */}
+      <header className="bg-card shadow-md border-b border-border fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 py-5 flex items-center justify-between">
           <div className="flex items-center">
             <MaterialSymbol icon="database" size="40px" fill className="text-primary mr-3" />
@@ -39,7 +39,7 @@ export default function Home() {
         </div>
       </header>
       
-      <main className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex-grow container mx-auto px-4 py-6 mt-24 mb-16">
         {/* Heading & Description */}
         <div className="mb-6">
           <h2 className="text-3xl font-bold mb-2 text-foreground">Database Management Console</h2>
@@ -93,8 +93,8 @@ export default function Home() {
         </div>
       </main>
       
-      {/* Status bar */}
-      <footer className="bg-card border-t border-border shadow-sm">
+      {/* Status bar - Fixed at the bottom */}
+      <footer className="bg-card border-t border-border shadow-sm fixed bottom-0 left-0 right-0 z-50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center text-sm">
             <MaterialSymbol icon="info" size="20px" className="text-primary mr-2" />
