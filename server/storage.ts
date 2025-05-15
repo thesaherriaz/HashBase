@@ -118,7 +118,7 @@ export class MemStorage implements IStorage {
   
   private createDefaultAdmin() {
     if (Object.keys(this.database.accessControl.users).length === 0) {
-      const adminPassword = crypto.randomBytes(4).toString('hex');
+      const adminPassword = 'admin123'; // Fixed password for demo purposes
       console.log('Created default admin user with password:', adminPassword);
       
       this.database.accessControl.users['admin'] = {
@@ -127,6 +127,17 @@ export class MemStorage implements IStorage {
         password: adminPassword,
         role: 'admin'
       };
+      
+      // Create permissions for existing tables
+      Object.keys(this.database.tables || {}).forEach(tableName => {
+        if (!this.database.accessControl.tablePermissions[tableName]) {
+          this.database.accessControl.tablePermissions[tableName] = {
+            read: ['admin'],
+            write: ['admin'],
+            admin: ['admin']
+          };
+        }
+      });
     }
   }
 

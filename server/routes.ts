@@ -572,6 +572,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Authentication operations
+  app.post("/api/login", async (req, res) => {
+    try {
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
+      const { username, password } = req.body;
+      if (!username || !password) {
+        return res.status(400).json({ 
+          message: "Username and password are required",
+          executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+        });
+      }
+      
+      const user = await storage.loginUser(username, password);
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      if (user) {
+        res.json({ 
+          user,
+          executionTime
+        });
+      } else {
+        res.status(401).json({
+          message: "Invalid username or password",
+          executionTime
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+  
   // Permission operations
   app.post("/api/permissions/grant", async (req, res) => {
     try {
@@ -586,14 +622,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Verify password for sensitive operation
-      const passwordValid = await storage.verifyPassword(password);
+      // Check if current user is admin - only admins can grant permissions
       const currentUser = await storage.getCurrentUser();
       const isAdmin = currentUser?.role === 'admin';
       
-      if (!passwordValid && !isAdmin) {
+      if (!isAdmin) {
         return res.status(403).json({ 
-          message: "Access denied: Password verification failed for permission operation", 
+          message: "Access denied: Only administrators can grant permissions", 
           executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
         });
       }
