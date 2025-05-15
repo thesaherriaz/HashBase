@@ -418,10 +418,10 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
             </CardHeader>
             <CardContent>
               <div className="data-flow-diagram p-4 bg-muted/30 rounded-lg border-2 border-dashed border-border flex flex-col items-center">
-                <svg width="100%" height="480" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" height="520" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
                   {/* Data Flow diagram */}
-                  <rect x="50" y="50" width="700" height="400" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="2"/>
-                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">Data Flow in Hash-based DBMS</text>
+                  <rect x="50" y="50" width="700" height="450" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="2"/>
+                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">Data Flow in HashBase DBMS</text>
                   
                   {/* User */}
                   <circle cx="120" cy="150" r="50" fill="#f1f5f9" stroke="#64748b" strokeWidth="2"/>
@@ -429,15 +429,18 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   
                   {/* UI */}
                   <rect x="250" y="120" width="120" height="60" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2"/>
-                  <text x="310" y="155" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">UI</text>
+                  <text x="310" y="145" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">React UI</text>
+                  <text x="310" y="165" textAnchor="middle" fill="#0f172a" fontSize="10">Query + Transaction Tabs</text>
                   
                   {/* API */}
                   <rect x="450" y="120" width="120" height="60" rx="8" fill="#cbd5e1" stroke="#64748b" strokeWidth="2"/>
-                  <text x="510" y="155" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">API</text>
+                  <text x="510" y="145" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Express API</text>
+                  <text x="510" y="165" textAnchor="middle" fill="#0f172a" fontSize="10">REST Endpoints</text>
                   
                   {/* SQL Parser */}
                   <rect x="250" y="240" width="120" height="60" rx="8" fill="#94a3b8" stroke="#64748b" strokeWidth="2"/>
-                  <text x="310" y="275" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">SQL Parser</text>
+                  <text x="310" y="265" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">SQL Parser</text>
+                  <text x="310" y="285" textAnchor="middle" fill="#0f172a" fontSize="10">Syntax Tree</text>
                   
                   {/* Query Executor */}
                   <rect x="450" y="240" width="120" height="60" rx="8" fill="#64748b" stroke="#475569" strokeWidth="2"/>
