@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { AccessManager } from './access-control';
+import { ConcurrencyManager } from './concurrency-manager';
 
 // Interface for storage operations
 export interface IStorage {
@@ -59,6 +60,7 @@ export interface IStorage {
 export class MemStorage implements IStorage {
   private database: DatabaseState;
   private accessManager: AccessManager;
+  private concurrencyManager: ConcurrencyManager;
 
   constructor() {
     // Initialize with empty database
@@ -108,6 +110,9 @@ export class MemStorage implements IStorage {
       this.database.accessControl, 
       () => this.save()
     );
+    
+    // Initialize the concurrency manager
+    this.concurrencyManager = new ConcurrencyManager();
   }
   
   private createDefaultAdmin() {

@@ -1,5 +1,40 @@
 {
-  "tables": {},
+  "tables": {
+    "students": {
+      "columns": {
+        "id": {
+          "type": "int",
+          "constraints": [
+            "primary_key"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "constraints": []
+        },
+        "age": {
+          "type": "int",
+          "constraints": []
+        }
+      },
+      "records": {
+        "1": {
+          "id": 1,
+          "name": "Alice",
+          "age": 21
+        }
+      },
+      "constraints": {
+        "primaryKeys": [
+          "id"
+        ]
+      },
+      "primary_keys": [
+        "id"
+      ],
+      "foreign_keys": {}
+    }
+  },
   "indexes": {},
   "activeTransactions": {},
   "implicitTransactionCounter": 0,
