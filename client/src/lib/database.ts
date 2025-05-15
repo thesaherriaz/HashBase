@@ -71,6 +71,18 @@ export class Database {
     }
   }
 
+  // Get information about active transactions and locks
+  async getTransactionInfo(): Promise<any> {
+    try {
+      const response = await apiRequest('GET', '/api/transactions');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error getting transaction info:', error);
+      throw error;
+    }
+  }
+  
   // Transaction operations
   async beginTransaction(transactionId: string): Promise<string> {
     try {

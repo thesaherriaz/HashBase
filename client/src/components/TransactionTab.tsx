@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Database from '@/lib/database';
 
 interface TransactionTabProps {
   onStatusChange: (status: string) => void;
+}
+
+interface TransactionLockInfo {
+  transactionId: string;
+  status: string;
+  locks: string[];
 }
 
 export default function TransactionTab({ onStatusChange }: TransactionTabProps) {
@@ -15,6 +22,32 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
   const [output, setOutput] = useState('');
   const [activeTransaction, setActiveTransaction] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [transactionInfo, setTransactionInfo] = useState<TransactionLockInfo[]>([]);
+  const [showTransactionInfo, setShowTransactionInfo] = useState(false);
+  
+  // Fetch transaction information periodically when showing transaction info
+  useEffect(() => {
+    if (!showTransactionInfo) return;
+    
+    // Fetch immediately
+    fetchTransactionInfo();
+    
+    // Set up interval to fetch every 5 seconds
+    const interval = setInterval(fetchTransactionInfo, 5000);
+    
+    // Clean up interval
+    return () => clearInterval(interval);
+  }, [showTransactionInfo]);
+  
+  // Function to fetch transaction information
+  const fetchTransactionInfo = async () => {
+    try {
+      const data = await Database.getTransactionInfo();
+      setTransactionInfo(data.transactions || []);
+    } catch (error) {
+      console.error('Error fetching transaction info:', error);
+    }
+  };
   
   // Begin a new transaction
   const beginTransaction = async () => {
@@ -263,6 +296,112 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
         </div>
       </div>
       
+      <div className="transaction-monitor-section mb-6">
+        <div className="flex items-center mb-2">
+          <MaterialSymbol icon="monitoring" className="text-primary mr-2" />
+          <h3 className="text-lg font-semibold">Transaction Monitor</h3>
+          
+          <Button 
+            onClick={() => {
+              setShowTransactionInfo(!showTransactionInfo);
+              if (!showTransactionInfo) {
+                fetchTransactionInfo();
+              }
+            }}
+            variant="outline"
+            size="sm"
+            className="ml-auto"
+          >
+            {showTransactionInfo ? (
+              <>
+                <MaterialSymbol icon="visibility_off" className="mr-2" size="18px" />
+                Hide Active Transactions
+              </>
+            ) : (
+              <>
+                <MaterialSymbol icon="visibility" className="mr-2" size="18px" />
+                Show Active Transactions
+              </>
+            )}
+          </Button>
+        </div>
+        
+        {showTransactionInfo && (
+          <div className="bg-card border border-border rounded-lg shadow-sm p-4">
+            <div className="mb-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-md font-medium">Active Transactions & Locks</h4>
+                <Button 
+                  onClick={fetchTransactionInfo}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7"
+                  title="Refresh"
+                >
+                  <MaterialSymbol icon="refresh" size="18px" />
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                View transactions currently running in the system and the locks they hold
+              </p>
+            </div>
+            
+            {transactionInfo.length === 0 ? (
+              <Alert>
+                <MaterialSymbol icon="info" className="h-4 w-4" />
+                <AlertTitle>No active transactions</AlertTitle>
+                <AlertDescription>
+                  There are currently no active transactions in the system. Start a new transaction to see it listed here.
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <div className="space-y-4">
+                {transactionInfo.map((tx) => (
+                  <div key={tx.transactionId} className="border border-border rounded-lg overflow-hidden">
+                    <div className={`p-3 flex items-center justify-between ${
+                      tx.status === 'active' ? 'bg-green-50 dark:bg-green-950' : 
+                      tx.status === 'pending' ? 'bg-yellow-50 dark:bg-yellow-950' : 'bg-red-50 dark:bg-red-950'
+                    }`}>
+                      <div>
+                        <span className="font-mono text-sm font-medium">{tx.transactionId}</span>
+                        <div className="flex items-center text-xs">
+                          <span className={`inline-block w-2 h-2 rounded-full mr-1 ${
+                            tx.status === 'active' ? 'bg-green-500' : 
+                            tx.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
+                          }`}></span>
+                          <span className="capitalize">{tx.status}</span>
+                        </div>
+                      </div>
+                      <div className="bg-card px-2 py-1 rounded-md text-xs">
+                        {tx.locks.length} lock{tx.locks.length !== 1 ? 's' : ''} held
+                      </div>
+                    </div>
+                    
+                    {tx.locks.length > 0 && (
+                      <div className="p-3 bg-muted/20">
+                        <h5 className="text-xs font-medium mb-2">Locks:</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {tx.locks.map((lock, idx) => (
+                            <div key={idx} className="bg-card px-2 py-1 rounded text-xs font-mono flex items-center">
+                              <MaterialSymbol 
+                                icon={lock.includes('write') ? "lock" : "lock_open"} 
+                                className={lock.includes('write') ? "text-red-500 mr-1" : "text-green-500 mr-1"} 
+                                size="14px" 
+                              />
+                              {lock}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      
       <div className="transaction-log-section">
         <div className="flex items-center mb-2">
           <MaterialSymbol icon="receipt_long" className="text-primary mr-2" />
@@ -318,6 +457,93 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
               <li>Fund transfers between accounts</li>
               <li>Complex data operations that must succeed or fail together</li>
             </ul>
+          </div>
+        </div>
+        
+        <div className="mt-4 border-t border-border pt-4">
+          <h3 className="font-medium text-lg mb-3">Transaction Locking & Multi-user Access</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-medium text-primary mb-2">How Locks Work</h4>
+              <div className="bg-muted/30 p-3 rounded border border-border">
+                <p className="mb-2">Our DBMS uses automatic locking to prevent multiple users from interfering with each other:</p>
+                <ul className="list-disc ml-4 text-muted-foreground space-y-1">
+                  <li><strong className="text-primary">Read Locks</strong>: Allow other transactions to read but not modify the same data</li>
+                  <li><strong className="text-primary">Write Locks</strong>: Prevent other transactions from both reading and modifying the same data</li>
+                  <li>Locks are automatically acquired when you execute commands in a transaction</li>
+                  <li>Locks are released when your transaction is committed or rolled back</li>
+                </ul>
+              </div>
+
+              <h4 className="font-medium text-primary mt-4 mb-2">Transaction Isolation Levels</h4>
+              <div className="bg-muted/30 p-3 rounded border border-border">
+                <p className="mb-2">Our DBMS supports different transaction isolation levels:</p>
+                <ul className="list-disc ml-4 text-muted-foreground space-y-1">
+                  <li><strong className="text-primary">Read Committed</strong> (default): Each query sees only committed data</li>
+                  <li><strong className="text-primary">Read Uncommitted</strong>: Can see uncommitted changes from other transactions</li>
+                  <li><strong className="text-primary">Serializable</strong>: Strongest isolation, transactions executed as if serialized</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-primary mb-2">Multi-user Scenario Example</h4>
+              <div className="bg-muted/30 p-3 rounded border border-border mb-4">
+                <p className="mb-2 text-foreground"><strong>Scenario: Two users updating grades simultaneously</strong></p>
+                
+                <div className="grid grid-cols-2 gap-3 border-t border-border pt-2">
+                  <div>
+                    <strong className="text-primary">User 1 (Alice)</strong>
+                    <div className="font-mono text-xs mt-1 space-y-1">
+                      <div>BEGIN TX alice_tx;</div>
+                      <div>UPDATE students SET grade = 'A' WHERE id = 1;</div>
+                      <div className="text-muted-foreground">/* Locks student record id=1 */</div>
+                      <div>/* Working on other things... */</div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <strong className="text-primary">User 2 (Bob)</strong>
+                    <div className="font-mono text-xs mt-1 space-y-1">
+                      <div>BEGIN TX bob_tx;</div>
+                      <div>SELECT * FROM students WHERE id = 1;</div>
+                      <div className="text-muted-foreground">/* Shows original grade */</div>
+                      <div>UPDATE students SET grade = 'B' WHERE id = 1;</div>
+                      <div className="text-muted-foreground">/* Waits for Alice's lock */</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 border-t border-border mt-2 pt-2">
+                  <div>
+                    <div className="font-mono text-xs space-y-1">
+                      <div>COMMIT TX alice_tx;</div>
+                      <div className="text-muted-foreground">/* Releases locks */</div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="font-mono text-xs space-y-1">
+                      <div className="text-muted-foreground">/* Bob's update now proceeds */</div>
+                      <div>COMMIT TX bob_tx;</div>
+                      <div className="text-muted-foreground">/* Student's grade is now 'B' */</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <h4 className="font-medium text-primary mb-2">Active Transactions & Locks</h4>
+              <div className="bg-muted/30 p-3 rounded border border-border">
+                <p className="mb-2">Our system provides visibility into active transactions:</p>
+                <ul className="list-disc ml-4 text-muted-foreground space-y-1">
+                  <li>View all active transactions and their held locks</li>
+                  <li>System provides automatic deadlock detection and prevention</li>
+                  <li>Transactions can timeout if left open too long</li>
+                  <li>You should always commit or rollback your transactions</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
