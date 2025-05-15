@@ -120,11 +120,12 @@ export class Database {
   }
 
   // Index operations
-  async createIndex(tableName: string, columnName: string): Promise<string> {
+  async createIndex(tableName: string, columnName: string, isComposite: boolean = false): Promise<string> {
     try {
       const response = await apiRequest('POST', '/api/indexes', { 
         tableName, 
-        columnName 
+        columnName,
+        isComposite
       });
       const data = await response.json();
       return data.message;
@@ -134,11 +135,12 @@ export class Database {
     }
   }
 
-  async dropIndex(tableName: string, columnName: string): Promise<string> {
+  async dropIndex(tableName: string, columnName: string, isComposite: boolean = false): Promise<string> {
     try {
       const response = await apiRequest('DELETE', '/api/indexes', { 
         tableName, 
-        columnName 
+        columnName,
+        isComposite
       });
       const data = await response.json();
       return data.message;

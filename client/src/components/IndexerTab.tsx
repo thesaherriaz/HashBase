@@ -141,14 +141,26 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="columnName" className="font-medium text-sm">Column Name:</label>
+              <label htmlFor="columnName" className="font-medium text-sm">Column Name{isComposite ? 's (comma-separated)' : ''}:</label>
               <Input
                 id="columnName"
                 value={columnName}
                 onChange={(e) => setColumnName(e.target.value)}
-                placeholder="Enter column name"
+                placeholder={isComposite ? "column1, column2, column3" : "Enter column name"}
                 disabled={isLoading}
               />
+            </div>
+            
+            <div className="flex items-center space-x-2 mb-2">
+              <input
+                type="checkbox"
+                id="isComposite"
+                checked={isComposite}
+                onChange={(e) => setIsComposite(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                disabled={isLoading}
+              />
+              <label htmlFor="isComposite" className="text-sm">Create Composite Index</label>
             </div>
             
             <Button 
@@ -191,14 +203,26 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="dropColumnName" className="font-medium text-sm">Column Name:</label>
+              <label htmlFor="dropColumnName" className="font-medium text-sm">Column Name{dropIsComposite ? 's (comma-separated)' : ''}:</label>
               <Input
                 id="dropColumnName"
                 value={dropColumnName}
                 onChange={(e) => setDropColumnName(e.target.value)}
-                placeholder="Enter column name"
+                placeholder={dropIsComposite ? "column1, column2, column3" : "Enter column name"}
                 disabled={isLoading}
               />
+            </div>
+            
+            <div className="flex items-center space-x-2 mb-2">
+              <input
+                type="checkbox"
+                id="dropIsComposite"
+                checked={dropIsComposite}
+                onChange={(e) => setDropIsComposite(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                disabled={isLoading}
+              />
+              <label htmlFor="dropIsComposite" className="text-sm">Drop Composite Index</label>
             </div>
             
             <Button 

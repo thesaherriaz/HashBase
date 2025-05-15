@@ -76,11 +76,29 @@ export type InsertDatabaseSnapshot = z.infer<typeof insertDatabaseSnapshotSchema
 export type DatabaseSnapshot = typeof databaseSnapshot.$inferSelect;
 
 // Types for our database engine
+export type User = {
+  id: string;
+  username: string;
+  password: string;
+  role: 'admin' | 'user' | 'readonly';
+};
+
+export type AccessControl = {
+  users: Record<string, User>;
+  tablePermissions: Record<string, {
+    read: string[]; // user IDs who can read
+    write: string[]; // user IDs who can write
+    admin: string[]; // user IDs who can alter table structure
+  }>;
+  currentUser?: string; // currently logged in user ID
+};
+
 export type DatabaseState = {
   tables: Record<string, TableSchema>,
   indexes: Record<string, Record<string, Record<string, string[]>>>,
   activeTransactions: Record<string, TransactionInfo>,
-  implicitTransactionCounter: number
+  implicitTransactionCounter: number,
+  accessControl: AccessControl
 };
 
 export type TableSchema = {
