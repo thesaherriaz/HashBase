@@ -426,6 +426,9 @@ export class MemStorage implements IStorage {
       locks: []
     };
     
+    // No locks are acquired at the beginning of a transaction
+    // They will be acquired as needed during query execution
+    
     this.save();
     return `Transaction ${transactionId} started successfully.`;
   }
@@ -439,7 +442,10 @@ export class MemStorage implements IStorage {
       return `Transaction ${transactionId} is not active!`;
     }
     
-    // Release all locks
+    // Release all locks via concurrency manager
+    this.concurrencyManager.releaseLocks(transactionId);
+    
+    // Clear the locks in the transaction record
     this.database.activeTransactions[transactionId].locks = [];
     
     // Mark transaction as committed
@@ -459,12 +465,19 @@ export class MemStorage implements IStorage {
       return `Transaction ${transactionId} does not exist!`;
     }
     
-    // Restore database from checkpoint
-    if (this.database.activeTransactions[transactionId].checkpoint) {
-      this.database.tables = this.database.activeTransactions[transactionId].checkpoint;
+    if (this.database.activeTransactions[transactionId].status !== 'active') {
+      return `Transaction ${transactionId} is not active!`;
     }
     
-    // Release all locks
+    // Restore database from checkpoint
+    if (this.database.activeTransactions[transactionId].checkpoint) {
+      this.database.tables = JSON.parse(JSON.stringify(this.database.activeTransactions[transactionId].checkpoint));
+    }
+    
+    // Release all locks via concurrency manager
+    this.concurrencyManager.releaseLocks(transactionId);
+    
+    // Clear the locks in the transaction record
     this.database.activeTransactions[transactionId].locks = [];
     
     // Mark transaction as rolled back
@@ -483,17 +496,64 @@ export class MemStorage implements IStorage {
       return `Transaction ${transactionId} is not active!`;
     }
     
-    // Execute the query
-    // This would normally call into the SQL parser/executor
-    // For now, we'll log it and return a placeholder result
-    
+    // Log the operation
     this.database.activeTransactions[transactionId].operations.push({
       query,
       timestamp: new Date().toISOString()
     });
     
-    this.save();
-    return "Query executed in transaction";
+    try {
+      // Parse the query to determine the required locks
+      // This is a simplified implementation - in a real system you would properly parse the SQL
+      const isWriteOperation = /INSERT|UPDATE|DELETE|CREATE|DROP|ALTER/i.test(query);
+      const tableName = this.extractTableName(query);
+      
+      if (tableName) {
+        // Acquire the appropriate lock (read or write)
+        const lockType = isWriteOperation ? 'write' : 'read';
+        
+        // Try to acquire the lock with timeout
+        await this.concurrencyManager.acquireLock(transactionId, tableName, lockType);
+        
+        // Add to the transaction's lock list
+        if (!this.database.activeTransactions[transactionId].locks.includes(tableName)) {
+          this.database.activeTransactions[transactionId].locks.push(tableName);
+        }
+      }
+      
+      // Execute the query - in a real implementation, you would parse and execute the SQL
+      // For now, we'll just save the transaction state
+      
+      this.save();
+      return "Query executed in transaction";
+      
+    } catch (error) {
+      // If lock acquisition failed, return the error
+      return `Failed to execute query: ${(error as Error).message}`;
+    }
+  }
+  
+  // Helper method to extract table name from a query
+  private extractTableName(query: string): string | null {
+    // This is a simple extraction and won't work for all SQL queries
+    // In a real implementation, you would use a proper SQL parser
+    const fromMatch = /FROM\s+([^\s,;]+)/i.exec(query);
+    const insertMatch = /INSERT\s+INTO\s+([^\s(,;]+)/i.exec(query);
+    const updateMatch = /UPDATE\s+([^\s,;]+)/i.exec(query);
+    const deleteMatch = /DELETE\s+FROM\s+([^\s,;]+)/i.exec(query);
+    const createMatch = /CREATE\s+TABLE\s+([^\s(,;]+)/i.exec(query);
+    const dropMatch = /DROP\s+TABLE\s+([^\s,;]+)/i.exec(query);
+    const alterMatch = /ALTER\s+TABLE\s+([^\s,;]+)/i.exec(query);
+    
+    if (fromMatch) return fromMatch[1];
+    if (insertMatch) return insertMatch[1];
+    if (updateMatch) return updateMatch[1];
+    if (deleteMatch) return deleteMatch[1];
+    if (createMatch) return createMatch[1];
+    if (dropMatch) return dropMatch[1];
+    if (alterMatch) return alterMatch[1];
+    
+    return null;
   }
 
   async createIndex(tableName: string, columnName: string | string[]): Promise<string> {

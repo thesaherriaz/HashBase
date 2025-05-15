@@ -270,19 +270,21 @@ export class ConcurrencyManager {
     let writeLocks = 0;
     let queuedRequests = 0;
     
-    for (const locks of this.locks.values()) {
-      for (const lock of locks) {
+    // Count locks
+    this.locks.forEach(locks => {
+      locks.forEach(lock => {
         if (lock.type === 'read') {
           readLocks++;
         } else {
           writeLocks++;
         }
-      }
-    }
+      });
+    });
     
-    for (const queue of this.lockQueue.values()) {
+    // Count queued requests
+    this.lockQueue.forEach(queue => {
       queuedRequests += queue.length;
-    }
+    });
     
     return {
       totalLocks: readLocks + writeLocks,
