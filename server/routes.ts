@@ -305,7 +305,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         executionTime 
       });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      // Calculate execution time even for errors
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      res.status(500).json({ error: (error as Error).message, executionTime });
     }
   });
 
