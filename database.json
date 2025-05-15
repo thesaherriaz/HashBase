@@ -1,0 +1,17 @@
+{
+  "tables": {},
+  "indexes": {},
+  "activeTransactions": {},
+  "implicitTransactionCounter": 0,
+  "accessControl": {
+    "users": {
+      "admin": {
+        "id": "admin",
+        "username": "admin",
+        "password": "41d3baa3",
+        "role": "admin"
+      }
+    },
+    "tablePermissions": {}
+  }
+}

@@ -2,8 +2,14 @@ import {
   DatabaseState, 
   TableSchema, 
   ColumnSchema, 
-  TransactionInfo
+  TransactionInfo,
+  AccessControl,
+  User
 } from "@shared/schema";
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { AccessManager } from './access-control';
 
 // Interface for storage operations
 export interface IStorage {
@@ -36,11 +42,23 @@ export interface IStorage {
   
   // Join operations
   joinTables(table1: string, table2: string, joinColumn1: string, joinColumn2: string, columns?: string[]): Promise<any[]>;
+  
+  // Access control operations
+  loginUser(username: string, password: string): Promise<User | null>;
+  createUser(username: string, password: string, role: string): Promise<User | null>;
+  getCurrentUser(): Promise<User | null>;
+  logoutUser(): Promise<void>;
+  
+  // Permission operations
+  grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string>;
+  revokeTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string>;
+  hasTablePermission(tableName: string, permission: 'read' | 'write' | 'admin'): Promise<boolean>;
 }
 
 // In-memory implementation of storage
 export class MemStorage implements IStorage {
   private database: DatabaseState;
+  private accessManager: AccessManager;
 
   constructor() {
     // Initialize with empty database
@@ -48,26 +66,73 @@ export class MemStorage implements IStorage {
       tables: {},
       indexes: {},
       activeTransactions: {},
-      implicitTransactionCounter: 0
+      implicitTransactionCounter: 0,
+      accessControl: {
+        users: {},
+        tablePermissions: {}
+      }
     };
     
-    // Load from localStorage if available (client-side)
-    if (typeof localStorage !== 'undefined') {
-      const savedDB = localStorage.getItem('database');
-      if (savedDB) {
-        try {
-          this.database = JSON.parse(savedDB);
-        } catch (e) {
-          console.error("Failed to load database from localStorage:", e);
-        }
+    const dbFilePath = path.join(process.cwd(), 'database.json');
+    
+    // Try to load from file first
+    if (fs.existsSync(dbFilePath)) {
+      try {
+        const data = fs.readFileSync(dbFilePath, 'utf8');
+        const loadedDB = JSON.parse(data);
+        
+        // Ensure we have the full structure
+        this.database = {
+          ...loadedDB,
+          accessControl: loadedDB.accessControl || {
+            users: {},
+            tablePermissions: {}
+          }
+        };
+        
+        console.log('Database loaded from file:', dbFilePath);
+      } catch (error) {
+        console.error('Failed to load database from file:', error);
+        // Create a default admin user
+        this.createDefaultAdmin();
       }
+    } else {
+      // Create a default admin user
+      this.createDefaultAdmin();
+      // Save the new database
+      this.save();
+    }
+    
+    // Initialize the access manager
+    this.accessManager = new AccessManager(
+      this.database.accessControl, 
+      () => this.save()
+    );
+  }
+  
+  private createDefaultAdmin() {
+    if (Object.keys(this.database.accessControl.users).length === 0) {
+      const adminPassword = crypto.randomBytes(4).toString('hex');
+      console.log('Created default admin user with password:', adminPassword);
+      
+      this.database.accessControl.users['admin'] = {
+        id: 'admin',
+        username: 'admin',
+        password: adminPassword,
+        role: 'admin'
+      };
     }
   }
 
   private save() {
-    // Save to localStorage if available (client-side)
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('database', JSON.stringify(this.database));
+    try {
+      // Save to JSON file
+      const dbFilePath = path.join(process.cwd(), 'database.json');
+      const data = JSON.stringify(this.database, null, 2);
+      fs.writeFileSync(dbFilePath, data, 'utf8');
+      console.log('Database saved to:', dbFilePath);
+    } catch (error) {
+      console.error('Error saving database to file:', error);
     }
   }
 
@@ -592,6 +657,46 @@ export class MemStorage implements IStorage {
     }
     
     return result;
+  }
+
+
+  // Access control delegation methods
+  async loginUser(username: string, password: string): Promise<User | null> {
+    return this.accessManager.loginUser(username, password);
+  }
+  
+  async createUser(username: string, password: string, role: string): Promise<User | null> {
+    return this.accessManager.createUser(username, password, role);
+  }
+  
+  async getCurrentUser(): Promise<User | null> {
+    return this.accessManager.getCurrentUser();
+  }
+  
+  async logoutUser(): Promise<void> {
+    return this.accessManager.logoutUser();
+  }
+  
+  async grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string> {
+    // First check if the table exists
+    if (!this.database.tables[tableName.toLowerCase()]) {
+      return `Table '${tableName}' does not exist`;
+    }
+    
+    return this.accessManager.grantTablePermission(tableName, userId, permission);
+  }
+  
+  async revokeTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string> {
+    // First check if the table exists
+    if (!this.database.tables[tableName.toLowerCase()]) {
+      return `Table '${tableName}' does not exist`;
+    }
+    
+    return this.accessManager.revokeTablePermission(tableName, userId, permission);
+  }
+  
+  async hasTablePermission(tableName: string, permission: 'read' | 'write' | 'admin'): Promise<boolean> {
+    return this.accessManager.hasTablePermission(tableName, permission);
   }
 }
 
