@@ -30,8 +30,8 @@ export interface IStorage {
   executeInTransaction(transactionId: string, query: string): Promise<any>;
   
   // Index operations
-  createIndex(tableName: string, columnName: string): Promise<string>;
-  dropIndex(tableName: string, columnName: string): Promise<string>;
+  createIndex(tableName: string, columnName: string | string[]): Promise<string>;
+  dropIndex(tableName: string, columnName: string | string[]): Promise<string>;
   getIndexes(): Promise<Record<string, Record<string, Record<string, string[]>>>>;
   
   // Join operations
@@ -322,7 +322,7 @@ export class MemStorage implements IStorage {
     while ((match = conditionRegex.exec(whereClause)) !== null) {
       const column = match[1].toLowerCase();
       const operator = match[2];
-      let value = match[4];
+      let value: any = match[4];
       
       // Convert value to appropriate type
       if (!isNaN(Number(value))) {
@@ -376,7 +376,9 @@ export class MemStorage implements IStorage {
     this.database.activeTransactions[transactionId].status = 'committed';
     
     // Remove checkpoint (no longer needed)
-    delete this.database.activeTransactions[transactionId].checkpoint;
+    if (this.database.activeTransactions[transactionId]) {
+      delete this.database.activeTransactions[transactionId].checkpoint;
+    }
     
     this.save();
     return `Transaction ${transactionId} committed successfully.`;
@@ -424,14 +426,24 @@ export class MemStorage implements IStorage {
     return "Query executed in transaction";
   }
 
-  async createIndex(tableName: string, columnName: string): Promise<string> {
+  async createIndex(tableName: string, columnName: string | string[]): Promise<string> {
     const table = this.database.tables[tableName.toLowerCase()];
+    const isComposite = Array.isArray(columnName);
+    const columnNameDisplay = isComposite ? columnName.join(", ") : columnName;
+    const indexKey = isComposite ? columnName.join("__") : columnName;
     
     if (!table) {
       return `Table '${tableName}' does not exist!`;
     }
     
-    if (!table.columns[columnName.toLowerCase()]) {
+    // Verify that all columns exist
+    if (isComposite) {
+      for (const col of columnName) {
+        if (!table.columns[col.toLowerCase()]) {
+          return `Column '${col}' does not exist in table '${tableName}'!`;
+        }
+      }
+    } else if (!table.columns[columnName.toLowerCase()]) {
       return `Column '${columnName}' does not exist in table '${tableName}'!`;
     }
     
@@ -441,39 +453,50 @@ export class MemStorage implements IStorage {
     }
     
     // Check if index already exists
-    if (this.database.indexes[tableName][columnName]) {
-      return `Index on '${tableName}.${columnName}' already exists!`;
+    if (this.database.indexes[tableName][indexKey]) {
+      return `Index on '${tableName}.${columnNameDisplay}' already exists!`;
     }
     
     // Create index
-    this.database.indexes[tableName][columnName] = {};
+    this.database.indexes[tableName][indexKey] = {};
     
     // Populate index with existing data
     const records = table.records;
     
     for (const key in records) {
       const record = records[key];
-      const indexValue = record[columnName].toString();
+      // For composite indexes, combine the values with a delimiter
+      let indexValue: string;
       
-      if (!this.database.indexes[tableName][columnName][indexValue]) {
-        this.database.indexes[tableName][columnName][indexValue] = [];
+      if (isComposite) {
+        indexValue = columnName.map(col => record[col]?.toString() || '').join('|');
+      } else {
+        indexValue = record[columnName]?.toString() || '';
       }
       
-      this.database.indexes[tableName][columnName][indexValue].push(key);
+      if (!this.database.indexes[tableName][indexKey][indexValue]) {
+        this.database.indexes[tableName][indexKey][indexValue] = [];
+      }
+      
+      this.database.indexes[tableName][indexKey][indexValue].push(key);
     }
     
     this.save();
-    return `Index created on '${tableName}.${columnName}' successfully.`;
+    return `Index created on '${tableName}.${columnNameDisplay}' successfully.`;
   }
 
-  async dropIndex(tableName: string, columnName: string): Promise<string> {
+  async dropIndex(tableName: string, columnName: string | string[]): Promise<string> {
+    const isComposite = Array.isArray(columnName);
+    const columnNameDisplay = isComposite ? columnName.join(", ") : columnName;
+    const indexKey = isComposite ? columnName.join("__") : columnName;
+    
     if (!this.database.indexes[tableName] || 
-        !this.database.indexes[tableName][columnName]) {
-      return `Index on '${tableName}.${columnName}' does not exist!`;
+        !this.database.indexes[tableName][indexKey]) {
+      return `Index on '${tableName}.${columnNameDisplay}' does not exist!`;
     }
     
     // Drop index
-    delete this.database.indexes[tableName][columnName];
+    delete this.database.indexes[tableName][indexKey];
     
     // Clean up empty structures
     if (Object.keys(this.database.indexes[tableName]).length === 0) {
@@ -481,7 +504,7 @@ export class MemStorage implements IStorage {
     }
     
     this.save();
-    return `Index on '${tableName}.${columnName}' dropped successfully.`;
+    return `Index on '${tableName}.${columnNameDisplay}' dropped successfully.`;
   }
 
   async getIndexes(): Promise<Record<string, Record<string, Record<string, string[]>>>> {

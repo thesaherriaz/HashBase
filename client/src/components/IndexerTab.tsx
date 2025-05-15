@@ -12,8 +12,10 @@ interface IndexerTabProps {
 export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
   const [tableName, setTableName] = useState('');
   const [columnName, setColumnName] = useState('');
+  const [isComposite, setIsComposite] = useState(false);
   const [dropTableName, setDropTableName] = useState('');
   const [dropColumnName, setDropColumnName] = useState('');
+  const [dropIsComposite, setDropIsComposite] = useState(false);
   const [output, setOutput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -48,8 +50,10 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
     
     try {
       setIsLoading(true);
-      onStatusChange(`Creating index on ${tableName}.${columnName}...`);
-      const result = await Database.createIndex(tableName, columnName);
+      const displayColumns = isComposite ? columnName.split(',').map(c => c.trim()).join(', ') : columnName;
+      onStatusChange(`Creating ${isComposite ? 'composite ' : ''}index on ${tableName}.${displayColumns}...`);
+      
+      const result = await Database.createIndex(tableName, columnName, isComposite);
       
       setOutput(prev => `${prev}\n${result}`);
       
@@ -59,6 +63,7 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
       // Clear input fields
       setTableName('');
       setColumnName('');
+      setIsComposite(false);
       
       onStatusChange('Index created successfully');
     } catch (error) {
@@ -79,8 +84,10 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
     
     try {
       setIsLoading(true);
-      onStatusChange(`Dropping index on ${dropTableName}.${dropColumnName}...`);
-      const result = await Database.dropIndex(dropTableName, dropColumnName);
+      const displayColumns = dropIsComposite ? dropColumnName.split(',').map(c => c.trim()).join(', ') : dropColumnName;
+      onStatusChange(`Dropping ${dropIsComposite ? 'composite ' : ''}index on ${dropTableName}.${displayColumns}...`);
+      
+      const result = await Database.dropIndex(dropTableName, dropColumnName, dropIsComposite);
       
       setOutput(prev => `${prev}\n${result}`);
       
@@ -90,6 +97,7 @@ export default function IndexerTab({ onStatusChange }: IndexerTabProps) {
       // Clear input fields
       setDropTableName('');
       setDropColumnName('');
+      setDropIsComposite(false);
       
       onStatusChange('Index dropped successfully');
     } catch (error) {

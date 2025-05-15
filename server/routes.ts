@@ -282,11 +282,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Index operations
   app.post('/api/indexes', async (req, res) => {
     try {
-      const { tableName, columnName } = req.body;
+      const { tableName, columnName, isComposite } = req.body;
       if (!tableName || !columnName) {
         return res.status(400).json({ message: 'Table name and column name are required' });
       }
-      const result = await storage.createIndex(tableName, columnName);
+      
+      // Parse column names for composite indexes
+      let columns = columnName;
+      if (isComposite && typeof columnName === 'string') {
+        columns = columnName.split(',').map(col => col.trim());
+      }
+      
+      const result = await storage.createIndex(tableName, columns);
       res.json({ message: result });
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
@@ -295,11 +302,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/indexes', async (req, res) => {
     try {
-      const { tableName, columnName } = req.body;
+      const { tableName, columnName, isComposite } = req.body;
       if (!tableName || !columnName) {
         return res.status(400).json({ message: 'Table name and column name are required' });
       }
-      const result = await storage.dropIndex(tableName, columnName);
+      
+      // Parse column names for composite indexes
+      let columns = columnName;
+      if (isComposite && typeof columnName === 'string') {
+        columns = columnName.split(',').map(col => col.trim());
+      }
+      
+      const result = await storage.dropIndex(tableName, columns);
       res.json({ message: result });
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });

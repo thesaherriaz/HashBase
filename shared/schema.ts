@@ -102,6 +102,6 @@ export type TransactionInfo = {
     query: string,
     timestamp: string
   }>,
-  checkpoint: Record<string, TableSchema>,
+  checkpoint?: Record<string, TableSchema>,
   locks: string[]
 };
