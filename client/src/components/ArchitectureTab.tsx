@@ -17,12 +17,13 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
   return (
     <div className="space-y-6">
       <Tabs defaultValue="comprehensive" className="w-full" value={activeView} onValueChange={setActiveView}>
-        <TabsList className="grid grid-cols-5 mb-6">
-          <TabsTrigger value="comprehensive" className="font-bold text-primary">Complete System View</TabsTrigger>
+        <TabsList className="grid grid-cols-6 mb-6">
+          <TabsTrigger value="comprehensive" className="font-bold text-primary">Complete View</TabsTrigger>
           <TabsTrigger value="handdrawn">Hand-Drawn</TabsTrigger>
           <TabsTrigger value="system">System</TabsTrigger>
           <TabsTrigger value="components">Components</TabsTrigger>
           <TabsTrigger value="data">Data Flow</TabsTrigger>
+          <TabsTrigger value="docs" className="font-bold text-primary">Documentation</TabsTrigger>
         </TabsList>
         
         <TabsContent value="comprehensive" className="space-y-4">
@@ -734,6 +735,373 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   New features include the Execution Timer which measures and displays query performance in milliseconds,
                   the Lock Monitor for visualizing transaction locks, and enhanced Access Control with password verification
                   for sensitive operations like DELETE and UPDATE.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="docs" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>HashBase DBMS Documentation</CardTitle>
+              <CardDescription>
+                Comprehensive documentation of the Hash-Based Database Management System
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="max-h-[80vh] overflow-y-auto pr-6">
+              <div className="prose prose-slate dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-bold mt-0 mb-4 scroll-m-20 border-b pb-2">1. Introduction</h2>
+                <p>
+                  HashBase is a modern hash-based database management system designed to maintain consistency, reliability, 
+                  and high performance under transaction load. Unlike traditional relational databases that rely on 
+                  disk-based storage and complex locking mechanisms, HashBase implements a hash-based storage engine 
+                  with efficient transaction management, concurrency control, ACID properties, and checkpoints.
+                </p>
+                <p>
+                  The system integrates a hash-based storage engine with a transaction manager, concurrency control,
+                  commit/rollback mechanisms, and a query processor. Checkpoints periodically save the database state,
+                  allowing recovery from crashes or failures. The system supports a variety of SQL commands through
+                  a modern web-based interface, enabling easy database interaction.
+                </p>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">2. Key Concepts</h2>
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">Hash-Based Implementation</h3>
+                <p>
+                  The database uses hash tables as its primary data structure for storing and retrieving records. 
+                  Each table maintains its records in a dictionary (hash map) where keys are the primary key 
+                  values and values are the complete records.
+                </p>
+                <p><strong>Key characteristics:</strong></p>
+                <ul>
+                  <li>O(1) average time complexity for insert, delete, and search operations</li>
+                  <li>Direct addressing via hash functions</li>
+                  <li>Collision handling through separate chaining</li>
+                </ul>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>Table "students":</p>
+                  <pre>{"{\n  \"1\": {\"id\": 1, \"name\": \"Alice\", \"age\": 20},\n  \"2\": {\"id\": 2, \"name\": \"Bob\", \"age\": 21}\n}"}</pre>
+                </div>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">3. Key Features</h2>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.1 Transaction Management</h3>
+                <p>
+                  The transaction manager is a critical component of HashBase, ensuring the database remains in
+                  a consistent state even during power outages, crashes, or unexpected failures. It supports
+                  the ACID properties:
+                </p>
+                <ul>
+                  <li><strong>Atomicity:</strong> Ensures that each transaction is fully completed or fully rolled back.</li>
+                  <li><strong>Consistency:</strong> Guarantees that the database transitions from one valid state to another.</li>
+                  <li><strong>Isolation:</strong> Ensures that transactions do not interfere with each other.</li>
+                  <li><strong>Durability:</strong> Ensures that completed transactions persist even after a failure.</li>
+                </ul>
+                <p>
+                  Concurrency control mechanisms, such as locking and timestamp-based management, prevent
+                  data corruption and ensure that multiple transactions can execute simultaneously without
+                  violating database integrity.
+                </p>
+                <p>
+                  The system supports ACID transactions with:
+                </p>
+                <ul>
+                  <li>BEGIN TRANSACTION</li>
+                  <li>COMMIT</li>
+                  <li>ROLLBACK</li>
+                </ul>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p># Begin transaction</p>
+                  <p>db.begin_transaction("tx1")</p>
+                  <p>&nbsp;</p>
+                  <p># Execute operations</p>
+                  <p>{`db.create_table("students", ["id int", "name string"], {"id": ["primary_key"]}, "tx1")`}</p>
+                  <p>{`db.insert("students", "1", ["1", "Alice"], "tx1")`}</p>
+                </div>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.2 Commit and Rollback Mechanism</h3>
+                <p>
+                  The commit and rollback mechanisms are essential for ensuring that transactions are properly
+                  completed or undone.
+                </p>
+                <ul>
+                  <li>
+                    <strong>Commit:</strong> When a transaction successfully completes all its operations, it is committed to
+                    the database, making its changes permanent.
+                  </li>
+                  <li>
+                    <strong>Rollback:</strong> If a transaction encounters an error or is explicitly rolled back, all changes
+                    made during the transaction are undone, restoring the database to its previous state.
+                  </li>
+                </ul>
+                <p>
+                  These mechanisms help maintain consistency in the database, even in the event of a system
+                  failure or transaction error.
+                </p>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p># Commit or rollback</p>
+                  <p>{`db.commit_transaction("tx1")`}</p>
+                  <p># OR</p>
+                  <p>{`db.rollback_transaction("tx1")`}</p>
+                </div>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.3 Indexing</h3>
+                <p>
+                  To improve data retrieval performance, HashBase implements sophisticated indexing. Indexes are data
+                  structures that improve the speed of query processing by allowing the DBMS to locate data more
+                  efficiently.
+                </p>
+                <p>
+                  The Indexer Class is responsible for managing the creation, maintenance, and utilization of
+                  indexes within the DBMS. It works closely with the transaction manager and query processor to
+                  ensure that indexed data can be quickly and efficiently retrieved.
+                </p>
+
+                <h4 className="text-lg font-medium mt-4 mb-2 scroll-m-20">3.3.1 Responsibilities of the Indexer Class</h4>
+                <ul>
+                  <li>
+                    <strong>Creating Indexes:</strong> The Indexer class allows for the creation of both hash-based and
+                    composite indexes on one or more columns in a table. When an index is created, it stores
+                    the hashing or indexed values in memory for rapid access.
+                  </li>
+                  <li>
+                    <strong>Index Maintenance:</strong> The Indexer ensures that indexes are updated in real-time whenever
+                    data is modified (inserted, updated, or deleted). It ensures that changes in the data are
+                    reflected in the corresponding indexes to maintain query performance.
+                  </li>
+                  <li>
+                    <strong>Efficient Query Execution:</strong> By utilizing the appropriate index, the Indexer improves the
+                    performance of queries by reducing the need to perform full table scans. The system can
+                    look up records faster by referring to the indexed values, thus significantly improving
+                    SELECT query performance.
+                  </li>
+                </ul>
+
+                <h4 className="text-lg font-medium mt-4 mb-2 scroll-m-20">3.3.2 Types of Indexes Managed</h4>
+                <ul>
+                  <li>
+                    <strong>Hash-based Indexes:</strong> These indexes use a hash function to map a column's values to a
+                    unique key, allowing for fast retrieval based on hashed keys.
+                  </li>
+                  <li>
+                    <strong>Composite Indexes:</strong> The Indexer can create composite indexes, where multiple columns
+                    are indexed together. This helps improve query performance when filtering on multiple
+                    attributes.
+                  </li>
+                </ul>
+                <p>
+                  The Indexer Class is crucial for improving the overall performance and scalability of the DBMS
+                  by reducing query response times, particularly when dealing with large datasets.
+                </p>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p># Create index</p>
+                  <p>{`db.create_index("students", "name")`}</p>
+                  <p># Query using index</p>
+                  <p>{`results = db.select_where("students", "name", "=", "Alice")`}</p>
+                  <p>&nbsp;</p>
+                  <p># Drop index</p>
+                  <p>{`db.drop_index("students", "name")`}</p>
+                </div>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.4 Constraints</h3>
+                <p>
+                  HashBase enforces several constraints to ensure data integrity and consistency:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Primary Key:</strong> Ensures that each record in the database has a unique identifier,
+                    preventing duplicate entries in the same table.
+                  </li>
+                  <li>
+                    <strong>Unique Key:</strong> Guarantees that the values in a specified column are unique across the
+                    entire table, allowing for NULL values.
+                  </li>
+                  <li>
+                    <strong>Foreign Key:</strong> Ensures referential integrity between tables by linking columns in one
+                    table to the primary key of another table.
+                  </li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.5 Storing Data in JSON Documents</h3>
+                <p>
+                  HashBase stores data in JSON format, providing flexibility and compatibility with modern web
+                  applications. This approach allows for:
+                </p>
+                <ul>
+                  <li>Efficient serialization and deserialization of data</li>
+                  <li>Human-readable format for easier debugging and data inspection</li>
+                  <li>Compatibility with web services and APIs</li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.6 Join Operations</h3>
+                <p>
+                  HashBase supports various types of join operations to combine data from multiple tables:
+                </p>
+                <ul>
+                  <li><strong>Inner Join:</strong> Returns records that have matching values in both tables</li>
+                  <li><strong>Left Join:</strong> Returns all records from the left table and matched records from the right table</li>
+                  <li><strong>Right Join:</strong> Returns all records from the right table and matched records from the left table</li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.7 Checkpoints</h3>
+                <p>
+                  Checkpoints are crucial for maintaining database durability and enabling recovery from failures.
+                </p>
+                
+                <h4 className="text-lg font-medium mt-4 mb-2 scroll-m-20">3.7.1 Purpose of Checkpoints</h4>
+                <ul>
+                  <li>Reduce recovery time after system failures</li>
+                  <li>Limit the amount of transaction log that needs to be processed during recovery</li>
+                  <li>Provide a consistent snapshot of the database state at a specific point in time</li>
+                </ul>
+                
+                <h4 className="text-lg font-medium mt-4 mb-2 scroll-m-20">3.7.2 Checkpoint Process</h4>
+                <ul>
+                  <li>Temporarily pause transaction processing</li>
+                  <li>Write all in-memory data to persistent storage</li>
+                  <li>Record the checkpoint in the transaction log</li>
+                  <li>Resume transaction processing</li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">3.8 Query Language</h3>
+                <p>
+                  HashBase supports a subset of SQL commands for data definition, manipulation, and querying:
+                </p>
+                <ul>
+                  <li>CREATE TABLE</li>
+                  <li>INSERT</li>
+                  <li>UPDATE</li>
+                  <li>DELETE</li>
+                  <li>SELECT</li>
+                  <li>JOIN</li>
+                </ul>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">4. Basic Commands</h2>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">4.1 Data Definition Language (DDL)</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>CREATE TABLE students (id INT PRIMARY KEY, name STRING, age INT)</p>
+                  <p>DROP TABLE students</p>
+                  <p>ALTER TABLE students ADD COLUMN grade STRING</p>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">4.2 Data Manipulation Language (DML)</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>INSERT INTO students VALUES (1, 'Alice', 20)</p>
+                  <p>UPDATE students SET age = 21 WHERE id = 1</p>
+                  <p>DELETE FROM students WHERE id = 1</p>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">4.3 Query Language</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>SELECT * FROM students</p>
+                  <p>{`SELECT name, age FROM students WHERE age > 20`}</p>
+                  <p>SELECT DISTINCT age FROM students</p>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">4.4 Aggregation</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>SELECT COUNT(*) FROM students</p>
+                  <p>SELECT AVG(age) FROM students</p>
+                  <p>SELECT SUM(age) FROM students</p>
+                </div>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">4.5 Joins</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>SELECT s.name, c.course_name FROM students s</p>
+                  <p>INNER JOIN courses c ON s.id = c.student_id</p>
+                </div>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">5. Advanced Features</h2>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">5.1 Transaction Management</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>BEGIN TRANSACTION</p>
+                  <p>INSERT INTO students VALUES (3, 'Charlie', 22)</p>
+                  <p>UPDATE courses SET course_name = 'Math' WHERE id = 1</p>
+                  <p>COMMIT</p>
+                  <p>-- OR</p>
+                  <p>ROLLBACK</p>
+                </div>
+                <p>
+                  HashBase's transaction management system uses a combination of two-phase locking and 
+                  timestamp ordering for concurrency control:
+                </p>
+                <ul>
+                  <li>Locks are acquired during transaction execution and held until commit or rollback</li>
+                  <li>Read and write locks prevent conflicting operations</li>
+                  <li>Deadlock detection and prevention mechanisms ensure transactions progress</li>
+                </ul>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">5.2 Indexing Implementation</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>CREATE INDEX idx_name ON students (name)</p>
+                  <p>CREATE INDEX idx_age_grade ON students (age, grade)</p>
+                  <p>DROP INDEX idx_name</p>
+                </div>
+                <p>
+                  HashBase's indexing system provides:
+                </p>
+                <ul>
+                  <li>Single-column indexes for fast lookups on individual fields</li>
+                  <li>Composite indexes for queries with multiple conditions</li>
+                  <li>Automatic index updates when data changes</li>
+                  <li>Index statistics to help the query optimizer</li>
+                </ul>
+                
+                <h3 className="text-xl font-semibold mt-6 mb-2 scroll-m-20">5.3 Constraint Enforcement</h3>
+                <div className="bg-muted p-3 rounded-md my-4 text-sm font-mono">
+                  <p>CREATE TABLE orders (</p>
+                  <p>  id INT PRIMARY KEY,</p>
+                  <p>  customer_id INT,</p>
+                  <p>{`  total FLOAT CHECK (total > 0),`}</p>
+                  <p>  FOREIGN KEY (customer_id) REFERENCES customers(id)</p>
+                  <p>)</p>
+                </div>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">6. System Requirements</h2>
+                <p>
+                  HashBase DBMS has been designed to work efficiently on modern systems with the following
+                  minimum requirements:
+                </p>
+                <ul>
+                  <li>Operating System: Cross-platform (Windows, macOS, Linux)</li>
+                  <li>Modern web browser supporting HTML5 and JavaScript</li>
+                  <li>Node.js runtime environment (for server operations)</li>
+                  <li>Minimum 4GB RAM (8GB recommended for larger databases)</li>
+                  <li>100MB of free disk space for the application (additional space required for databases)</li>
+                </ul>
+                <p>
+                  For optimal performance with large datasets (over 100,000 records), the following specifications
+                  are recommended:
+                </p>
+                <ul>
+                  <li>16GB RAM or more</li>
+                  <li>Multi-core CPU (4+ cores)</li>
+                  <li>SSD storage for faster data access</li>
+                </ul>
+
+                <h2 className="text-2xl font-bold mt-8 mb-4 scroll-m-20 border-b pb-2">7. Conclusion</h2>
+                <p>
+                  HashBase DBMS offers a modern, efficient solution for data management with a focus on
+                  performance, reliability, and ease of use. By leveraging hash-based storage and implementing
+                  robust transaction management, the system provides a solid foundation for applications
+                  requiring data consistency and integrity.
+                </p>
+                <p>
+                  Key advantages of HashBase include:
+                </p>
+                <ul>
+                  <li>Fast data access through hash-based lookups</li>
+                  <li>Strong ACID compliance for reliable transaction processing</li>
+                  <li>Flexible indexing for optimized query performance</li>
+                  <li>Intuitive web interface for easy database management</li>
+                  <li>Support for industry-standard SQL syntax</li>
+                  <li>Built-in security with access control and authentication</li>
+                </ul>
+                <p>
+                  HashBase continues to evolve with ongoing feature development and performance optimizations,
+                  making it a versatile choice for modern application development.
                 </p>
               </div>
             </CardContent>
