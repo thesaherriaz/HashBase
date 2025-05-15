@@ -166,6 +166,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
           });
         }
+        
+        // For sensitive UPDATE operations, verify password
+        if (!isAdmin) {
+          const passwordValid = await storage.verifyPassword(password);
+          if (!passwordValid) {
+            return res.status(403).json({ 
+              message: "Access denied: Password verification failed for UPDATE operation", 
+              executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
+            });
+          }
+        }
 
         // Parse SET clause
         const updates: Record<string, any> = {};

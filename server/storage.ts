@@ -54,6 +54,7 @@ export interface IStorage {
   grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string>;
   revokeTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string>;
   hasTablePermission(tableName: string, permission: 'read' | 'write' | 'admin'): Promise<boolean>;
+  verifyPassword(password: string): Promise<boolean>;
 }
 
 // In-memory implementation of storage
@@ -898,6 +899,16 @@ export class MemStorage implements IStorage {
   
   async hasTablePermission(tableName: string, permission: 'read' | 'write' | 'admin'): Promise<boolean> {
     return this.accessManager.hasTablePermission(tableName, permission);
+  }
+  
+  async verifyPassword(password: string): Promise<boolean> {
+    if (!password) return false;
+    
+    const currentUser = await this.getCurrentUser();
+    if (!currentUser) return false;
+    
+    // Simple password verification - in production use secure comparison
+    return currentUser.password === password;
   }
 }
 
