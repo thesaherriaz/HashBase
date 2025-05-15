@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
 
 type User = {
-  id: string;
+  id: string | number;
   username: string;
   role: string;
 };
@@ -13,20 +14,14 @@ interface AccountDropdownProps {
 }
 
 export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [loginDialogOpen, setLoginDialogOpen] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
-  // Fetch current user on component mount
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
-
+  const { user, loginMutation, logoutMutation } = useAuth();
+  
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -40,21 +35,6 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
     };
   }, []);
 
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await fetch('/api/user');
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data);
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      setUser(null);
-    }
-  };
-
   const handleLogin = async () => {
     if (!username || !password) {
       toast({
@@ -65,73 +45,24 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
       return;
     }
 
-    setLoading(true);
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setLoginDialogOpen(false);
-        toast({
-          title: 'Login successful',
-          description: `Welcome back, ${data.user.username}!`,
-        });
-      } else {
-        const errorData = await response.json();
-        toast({
-          title: 'Login failed',
-          description: errorData.message || 'Invalid credentials',
-          variant: 'destructive',
-        });
+    loginMutation.mutate(
+      { username, password },
+      {
+        onSuccess: () => {
+          setLoginDialogOpen(false);
+          setUsername('');
+          setPassword('');
+        }
       }
-    } catch (error) {
-      toast({
-        title: 'Login error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
-  const handleLogout = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/logout', {
-        method: 'POST',
-      });
-
-      if (response.ok) {
-        setUser(null);
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
         setShowDropdown(false);
-        toast({
-          title: 'Logout successful',
-          description: 'You have been logged out',
-        });
-      } else {
-        toast({
-          title: 'Logout failed',
-          description: 'Failed to log out',
-          variant: 'destructive',
-        });
       }
-    } catch (error) {
-      toast({
-        title: 'Logout error',
-        description: 'An unexpected error occurred',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
   return (
@@ -212,10 +143,10 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
               <div className="pt-2">
                 <button
                   onClick={handleLogin}
-                  disabled={loading}
+                  disabled={loginMutation.isPending}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-md font-medium"
                 >
-                  {loading ? (
+                  {loginMutation.isPending ? (
                     <span className="flex items-center justify-center">
                       <MaterialSymbol icon="autorenew" className="animate-spin mr-2" />
                       Logging in...
