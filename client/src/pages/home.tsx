@@ -65,13 +65,6 @@ export default function Home() {
       </header>
       
       <main className="flex-grow container mx-auto px-4 py-6 mt-24 mb-16">
-        {/* Heading & Description */}
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold mb-2 text-foreground">Database Management Console</h2>
-          <p className="text-muted-foreground">
-            Execute queries, manage transactions, create joins, and optimize with indexes
-          </p>
-        </div>
         
         {/* Mobile tab navigation for smaller screens */}
         <div className="md:hidden tab-nav flex border-b border-border mb-6 overflow-x-auto">
