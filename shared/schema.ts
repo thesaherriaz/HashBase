@@ -1,6 +1,26 @@
-import { pgTable, text, serial, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// User role enum
+export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'readonly']);
+
+// Users table for authentication
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: varchar("username", { length: 50 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  role: userRoleEnum("role").notNull().default('user'),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertUserSchema = createInsertSchema(users).omit({ 
+  id: true,
+  createdAt: true,
+});
+
+export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 
 // Table model - represents a database table
 export const tables = pgTable("tables", {
@@ -75,30 +95,7 @@ export type Transaction = typeof transactions.$inferSelect;
 export type InsertDatabaseSnapshot = z.infer<typeof insertDatabaseSnapshotSchema>;
 export type DatabaseSnapshot = typeof databaseSnapshot.$inferSelect;
 
-// Types for our database engine
-import { pgTable, text, integer, timestamp, varchar, boolean, pgEnum } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
-
-// User role enum
-export const userRoleEnum = pgEnum('user_role', ['admin', 'user', 'readonly']);
-
-// Users table
-export const users = pgTable("users", {
-  id: integer("id").primaryKey().notNull(),
-  username: varchar("username", { length: 50 }).notNull().unique(),
-  password: varchar("password", { length: 255 }).notNull(),
-  role: userRoleEnum("role").notNull().default('user'),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const insertUserSchema = createInsertSchema(users).omit({ 
-  id: true,
-  createdAt: true,
-});
-
-export type User = typeof users.$inferSelect;
-export type InsertUser = z.infer<typeof insertUserSchema>;
+// Legacy type definitions for our in-memory database engine
 
 export type AccessControl = {
   users: Record<string, User>;
