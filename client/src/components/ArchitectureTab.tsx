@@ -328,43 +328,63 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
             </CardHeader>
             <CardContent>
               <div className="components-diagram p-4 bg-muted/30 rounded-lg border-2 border-dashed border-border flex flex-col items-center">
-                <svg width="100%" height="480" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" height="520" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
                   {/* Components diagram */}
-                  <rect x="50" y="50" width="700" height="400" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="2"/>
-                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">Component Relationships</text>
+                  <rect x="50" y="50" width="700" height="450" rx="8" fill="#f8fafc" stroke="#64748b" strokeWidth="2"/>
+                  <text x="400" y="30" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="bold">HashBase DBMS Component Relationships</text>
                   
                   {/* Main Components - Query Engine */}
-                  <rect x="100" y="100" width="180" height="80" rx="8" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
-                  <text x="190" y="145" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Query Engine</text>
+                  <rect x="90" y="100" width="180" height="80" rx="8" fill="#dbeafe" stroke="#3b82f6" strokeWidth="2"/>
+                  <text x="180" y="135" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Query Engine</text>
+                  <text x="180" y="155" textAnchor="middle" fill="#0f172a" fontSize="12">SQL Parsing & Execution</text>
                   
                   {/* Transaction Manager */}
-                  <rect x="500" y="100" width="180" height="80" rx="8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2"/>
-                  <text x="590" y="145" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Transaction Manager</text>
-                  
-                  {/* Indexer */}
-                  <rect x="100" y="300" width="180" height="80" rx="8" fill="#d1fae5" stroke="#10b981" strokeWidth="2"/>
-                  <text x="190" y="345" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Indexer</text>
-                  
-                  {/* Join Processor */}
-                  <rect x="500" y="300" width="180" height="80" rx="8" fill="#ede9fe" stroke="#8b5cf6" strokeWidth="2"/>
-                  <text x="590" y="345" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Join Processor</text>
+                  <rect x="510" y="100" width="180" height="80" rx="8" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2"/>
+                  <text x="600" y="135" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Transaction Manager</text>
+                  <text x="600" y="155" textAnchor="middle" fill="#0f172a" fontSize="12">ACID Properties & Locks</text>
                   
                   {/* Storage */}
                   <rect x="300" y="200" width="180" height="80" rx="8" fill="#fee2e2" stroke="#ef4444" strokeWidth="2"/>
-                  <text x="390" y="245" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Storage Manager</text>
+                  <text x="390" y="235" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Storage Manager</text>
+                  <text x="390" y="255" textAnchor="middle" fill="#0f172a" fontSize="12">JSON + PostgreSQL</text>
                   
-                  {/* Access Control */}
-                  <rect x="300" y="380" width="180" height="50" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2"/>
-                  <text x="390" y="410" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Access Control</text>
+                  {/* Composite Indexer - Updated */}
+                  <rect x="90" y="300" width="180" height="80" rx="8" fill="#d1fae5" stroke="#10b981" strokeWidth="2"/>
+                  <text x="180" y="335" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Composite Indexer</text>
+                  <text x="180" y="355" textAnchor="middle" fill="#0f172a" fontSize="12">Multi-column Hash Indexes</text>
+                  
+                  {/* Join Processor */}
+                  <rect x="510" y="300" width="180" height="80" rx="8" fill="#ede9fe" stroke="#8b5cf6" strokeWidth="2"/>
+                  <text x="600" y="335" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Join Processor</text>
+                  <text x="600" y="355" textAnchor="middle" fill="#0f172a" fontSize="12">Table Join Operations</text>
+                  
+                  {/* Access Control - Enhanced */}
+                  <rect x="180" y="440" width="180" height="50" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="270" y="470" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Enhanced Access Control</text>
+                  
+                  {/* Performance Monitor - New */}
+                  <rect x="420" y="440" width="180" height="50" rx="8" fill="#e2e8f0" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="510" y="470" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Execution Timer</text>
+                  
+                  {/* Concurrency Manager - New */}
+                  <rect x="420" y="100" width="70" height="40" rx="5" fill="#e2e8f0" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="455" y="125" textAnchor="middle" fill="#0f172a" fontSize="10" fontWeight="bold">Concurrency</text>
+                  
+                  {/* Transaction Monitor - New */}
+                  <rect x="700" y="120" width="40" height="40" rx="4" fill="#e2e8f0" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="720" y="145" textAnchor="middle" fill="#0f172a" fontSize="10">Monitor</text>
                   
                   {/* Connection Lines */}
-                  <line x1="190" y1="180" x2="300" y2="220" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="590" y1="180" x2="480" y2="220" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="190" y1="300" x2="300" y2="260" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="590" y1="300" x2="480" y2="260" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="390" y1="280" x2="390" y2="380" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="280" y1="140" x2="500" y2="140" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
-                  <line x1="280" y1="340" x2="500" y2="340" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="180" y1="180" x2="300" y2="220" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="600" y1="180" x2="480" y2="220" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="180" y1="300" x2="300" y2="260" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="600" y1="300" x2="480" y2="260" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="390" y1="280" x2="270" y2="440" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="390" y1="280" x2="510" y2="440" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="270" y1="140" x2="420" y2="140" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="490" y1="120" x2="510" y2="120" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="690" y1="140" x2="700" y2="140" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                  <line x1="270" y1="340" x2="510" y2="340" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead)"/>
                   
                   {/* Arrow Definitions */}
                   <defs>
@@ -372,11 +392,19 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                       <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
                     </marker>
                   </defs>
+                  
+                  {/* Legend */}
+                  <rect x="100" y="380" width="15" height="15" rx="2" fill="#e2e8f0" stroke="#64748b" strokeWidth="1"/>
+                  <text x="125" y="392" textAnchor="start" fill="#0f172a" fontSize="10">Core Component</text>
+                  
+                  <rect x="200" y="380" width="15" height="15" rx="2" fill="#e2e8f0" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="225" y="392" textAnchor="start" fill="#0f172a" fontSize="10">New Feature</text>
                 </svg>
                 <p className="text-sm text-muted-foreground mt-4">
-                  The component diagram illustrates how different modules of the DBMS interact. 
-                  The Storage Manager serves as the central component connecting the Query Engine, 
-                  Transaction Manager, Indexer, and Join Processor.
+                  This component diagram shows the relationships between the core modules of the DBMS. 
+                  Recent enhancements include the Composite Indexer for multi-column indexing, Execution Timer for 
+                  performance monitoring, and Enhanced Access Control with password verification for sensitive operations.
+                  The Transaction Manager now includes a monitoring interface to visualize locks in real-time.
                 </p>
               </div>
             </CardContent>
