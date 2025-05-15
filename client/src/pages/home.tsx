@@ -3,7 +3,7 @@ import QueryTab from '@/components/QueryTab';
 import TransactionTab from '@/components/TransactionTab';
 import JoinTab from '@/components/JoinTab';
 import IndexerTab from '@/components/IndexerTab';
-import AuthStatus from '@/components/AuthStatus';
+import AccountDropdown from '@/components/AccountDropdown';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
 
 type Tab = 'query' | 'transaction' | 'join' | 'indexer';
@@ -16,25 +16,63 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header - Fixed at the top */}
       <header className="bg-card shadow-md border-b border-border fixed top-0 left-0 right-0 z-50">
-        <div className="container mx-auto px-4 py-5 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center">
-            <MaterialSymbol icon="database" size="40px" fill className="text-primary mr-3" />
-            <h1 className="text-2xl font-bold text-foreground">
+            <MaterialSymbol icon="database" size="40px" fill className="text-primary mr-2" />
+            <h1 className="text-xl font-bold text-foreground">
               HashBase <span className="text-primary font-normal">DBMS</span>
             </h1>
           </div>
+          
+          {/* Main Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <button 
+              className={`nav-item flex items-center text-sm font-medium pb-1 
+                ${activeTab === 'query' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setActiveTab('query')}
+            >
+              <MaterialSymbol icon="code" className="mr-1" />
+              SQL Queries
+            </button>
+            <button 
+              className={`nav-item flex items-center text-sm font-medium pb-1 
+                ${activeTab === 'transaction' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setActiveTab('transaction')}
+            >
+              <MaterialSymbol icon="sync" className="mr-1" />
+              Transaction Manager
+            </button>
+            <button 
+              className={`nav-item flex items-center text-sm font-medium pb-1 
+                ${activeTab === 'join' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setActiveTab('join')}
+            >
+              <MaterialSymbol icon="merge_type" className="mr-1" />
+              Join Operations
+            </button>
+            <button 
+              className={`nav-item flex items-center text-sm font-medium pb-1 
+                ${activeTab === 'indexer' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setActiveTab('indexer')}
+            >
+              <MaterialSymbol icon="sort" className="mr-1" />
+              Indexer
+            </button>
+          </nav>
+          
+          {/* System Info (visible on large screens) & Auth */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center text-sm text-muted-foreground">
+            <div className="hidden lg:flex items-center text-xs text-muted-foreground bg-background/50 rounded-full px-3 py-1">
               <MaterialSymbol icon="memory_alt" className="mr-1" />
-              <span className="hidden md:inline">In-Memory</span>
-              <span className="mx-2">|</span>
+              <span className="hidden xl:inline">In-Memory</span>
+              <span className="mx-1">|</span>
               <MaterialSymbol icon="key" className="mr-1" />
-              <span className="hidden md:inline">Hash-based</span>
-              <span className="mx-2">|</span>
+              <span className="hidden xl:inline">Hash-based</span>
+              <span className="mx-1">|</span>
               <MaterialSymbol icon="bolt" className="mr-1" />
               <span>v1.0</span>
             </div>
-            <AuthStatus />
+            <AccountDropdown setActiveTab={(tab: any) => setActiveTab(tab)} />
           </div>
         </div>
       </header>
@@ -48,39 +86,39 @@ export default function Home() {
           </p>
         </div>
         
-        {/* Tab navigation */}
-        <div className="tab-nav flex border-b border-border mb-6">
+        {/* Mobile tab navigation for smaller screens */}
+        <div className="md:hidden tab-nav flex border-b border-border mb-6 overflow-x-auto">
           <button 
-            className={`tab py-3 px-6 rounded-t-lg mr-1 font-medium 
+            className={`tab py-2 px-4 rounded-t-lg mr-1 font-medium text-sm
               ${activeTab === 'query' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('query')}
           >
-            <MaterialSymbol icon="code" className="align-middle mr-2" />
-            SQL Queries
+            <MaterialSymbol icon="code" className="align-middle mr-1" />
+            SQL
           </button>
           <button 
-            className={`tab py-3 px-6 rounded-t-lg mr-1 font-medium 
+            className={`tab py-2 px-4 rounded-t-lg mr-1 font-medium text-sm
               ${activeTab === 'transaction' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('transaction')}
           >
-            <MaterialSymbol icon="sync" className="align-middle mr-2" />
-            Transaction Management
+            <MaterialSymbol icon="sync" className="align-middle mr-1" />
+            Trans.
           </button>
           <button 
-            className={`tab py-3 px-6 rounded-t-lg mr-1 font-medium 
+            className={`tab py-2 px-4 rounded-t-lg mr-1 font-medium text-sm
               ${activeTab === 'join' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('join')}
           >
-            <MaterialSymbol icon="merge_type" className="align-middle mr-2" />
-            Join Operations
+            <MaterialSymbol icon="merge_type" className="align-middle mr-1" />
+            Join
           </button>
           <button 
-            className={`tab py-3 px-6 rounded-t-lg font-medium 
+            className={`tab py-2 px-4 rounded-t-lg font-medium text-sm
               ${activeTab === 'indexer' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('indexer')}
           >
-            <MaterialSymbol icon="sort" className="align-middle mr-2" />
-            Indexer
+            <MaterialSymbol icon="sort" className="align-middle mr-1" />
+            Index
           </button>
         </div>
         
