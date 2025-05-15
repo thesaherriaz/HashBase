@@ -61,9 +61,11 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
       }
       
       onStatusChange(`Starting transaction ${txId}...`);
-      const result = await Database.beginTransaction(txId);
+      const response = await Database.beginTransaction(txId);
+      const result = typeof response === 'string' ? response : response.message;
+      const executionTime = typeof response === 'object' && response.executionTime ? response.executionTime : '';
       
-      setOutput(`${new Date().toLocaleTimeString()} - Transaction started: ${txId}\n${result}`);
+      setOutput(`${new Date().toLocaleTimeString()} - Transaction started: ${txId}\n${result}${executionTime ? `\nExecution time: ${executionTime}` : ''}`);
       setActiveTransaction(txId);
       onStatusChange(`Active transaction: ${txId}`);
     } catch (error) {
@@ -85,9 +87,11 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
     try {
       setIsLoading(true);
       onStatusChange(`Committing transaction ${activeTransaction}...`);
-      const result = await Database.commitTransaction(activeTransaction);
+      const response = await Database.commitTransaction(activeTransaction);
+      const result = typeof response === 'string' ? response : response.message;
+      const executionTime = typeof response === 'object' && response.executionTime ? response.executionTime : '';
       
-      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Transaction committed: ${activeTransaction}\n${result}`);
+      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Transaction committed: ${activeTransaction}\n${result}${executionTime ? `\nExecution time: ${executionTime}` : ''}`);
       setActiveTransaction(null);
       onStatusChange('Transaction committed successfully');
     } catch (error) {
@@ -109,9 +113,11 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
     try {
       setIsLoading(true);
       onStatusChange(`Rolling back transaction ${activeTransaction}...`);
-      const result = await Database.rollbackTransaction(activeTransaction);
+      const response = await Database.rollbackTransaction(activeTransaction);
+      const result = typeof response === 'string' ? response : response.message;
+      const executionTime = typeof response === 'object' && response.executionTime ? response.executionTime : '';
       
-      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Transaction rolled back: ${activeTransaction}\n${result}`);
+      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Transaction rolled back: ${activeTransaction}\n${result}${executionTime ? `\nExecution time: ${executionTime}` : ''}`);
       setActiveTransaction(null);
       onStatusChange('Transaction rolled back successfully');
     } catch (error) {
@@ -138,9 +144,11 @@ export default function TransactionTab({ onStatusChange }: TransactionTabProps) 
     try {
       setIsLoading(true);
       onStatusChange(`Executing query in transaction ${activeTransaction}...`);
-      const result = await Database.executeInTransaction(activeTransaction, transactionQuery);
+      const response = await Database.executeInTransaction(activeTransaction, transactionQuery);
+      const result = typeof response === 'string' ? response : response.message;
+      const executionTime = typeof response === 'object' && response.executionTime ? response.executionTime : '';
       
-      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Query executed: ${transactionQuery}\n${result}`);
+      setOutput(prev => `${prev}\n${new Date().toLocaleTimeString()} - Query executed: ${transactionQuery}\n${result}${executionTime ? `\nExecution time: ${executionTime}` : ''}`);
       setTransactionQuery('');
       onStatusChange(`Query executed in transaction ${activeTransaction}`);
     } catch (error) {

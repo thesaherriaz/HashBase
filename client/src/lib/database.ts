@@ -84,47 +84,47 @@ export class Database {
   }
   
   // Transaction operations
-  async beginTransaction(transactionId: string): Promise<string> {
+  async beginTransaction(transactionId: string): Promise<{message: string, executionTime: string} | string> {
     try {
       const response = await apiRequest('POST', '/api/transactions/begin', { transactionId });
       const data = await response.json();
-      return data.message;
+      return data;
     } catch (error) {
       console.error('Error beginning transaction:', error);
       return (error as Error).message;
     }
   }
 
-  async commitTransaction(transactionId: string): Promise<string> {
+  async commitTransaction(transactionId: string): Promise<{message: string, executionTime: string} | string> {
     try {
       const response = await apiRequest('POST', '/api/transactions/commit', { transactionId });
       const data = await response.json();
-      return data.message;
+      return data;
     } catch (error) {
       console.error('Error committing transaction:', error);
       return (error as Error).message;
     }
   }
 
-  async rollbackTransaction(transactionId: string): Promise<string> {
+  async rollbackTransaction(transactionId: string): Promise<{message: string, executionTime: string} | string> {
     try {
       const response = await apiRequest('POST', '/api/transactions/rollback', { transactionId });
       const data = await response.json();
-      return data.message;
+      return data;
     } catch (error) {
       console.error('Error rolling back transaction:', error);
       return (error as Error).message;
     }
   }
 
-  async executeInTransaction(transactionId: string, query: string): Promise<string> {
+  async executeInTransaction(transactionId: string, query: string): Promise<{message: string, executionTime: string} | string> {
     try {
       const response = await apiRequest('POST', '/api/transactions/execute', { 
         transactionId, 
         query 
       });
       const data = await response.json();
-      return data.message;
+      return data;
     } catch (error) {
       console.error('Error executing in transaction:', error);
       return (error as Error).message;

@@ -435,17 +435,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/transactions/execute", async (req, res) => {
+    // Start timer for execution time measurement
+    const startTime = process.hrtime();
+    
     try {
       const { transactionId, query } = req.body;
       if (!transactionId || !query) {
         return res
           .status(400)
-          .json({ message: "Transaction ID and query are required" });
+          .json({ 
+            message: "Transaction ID and query are required",
+            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms`
+          });
       }
       const result = await storage.executeInTransaction(transactionId, query);
-      res.json({ message: result });
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: result,
+        executionTime
+      });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      // Calculate execution time even for errors
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      res.status(500).json({ error: (error as Error).message, executionTime });
     }
   });
 
