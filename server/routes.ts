@@ -573,6 +573,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Authentication operations
+  app.post("/api/logout", async (req, res) => {
+    try {
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
+      await storage.logoutUser();
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      res.json({ 
+        message: "Logout successful",
+        executionTime
+      });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+  
   app.post("/api/login", async (req, res) => {
     try {
       // Start timer for execution time measurement
