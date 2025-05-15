@@ -19,7 +19,10 @@ export class Database {
     try {
       const response = await apiRequest('POST', '/api/query', { query });
       const data = await response.json();
-      return data.result;
+      return {
+        result: data.result,
+        executionTime: data.executionTime
+      };
     } catch (error) {
       console.error('Error executing query:', error);
       throw error;

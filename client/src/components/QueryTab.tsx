@@ -47,22 +47,35 @@ export default function QueryTab({ onStatusChange }: QueryTabProps) {
       setIsLoading(true);
       onStatusChange('Executing query...');
       
-      const result = await processQuery(query);
+      const response = await processQuery(query);
       
       // Add to history
       setHistory(prev => [...prev.slice(-9), query]);
       
+      // Extract the actual result and execution time
+      const result = response.result;
+      const executionTimeMs = response.executionTimeMs;
+      const executionTimeStr = response.executionTime;
+      
       // Format the result
-      const formattedResult = typeof result === 'object'
+      let formattedResult = typeof result === 'object'
         ? JSON.stringify(result, null, 2)
         : result.toString();
+      
+      // Add execution time in milliseconds points if available
+      if (executionTimeMs !== undefined) {
+        formattedResult = `Execution Time: ${executionTimeMs} ms\n\n${formattedResult}`;
+      } else if (executionTimeStr) {
+        formattedResult = `Execution Time: ${executionTimeStr}\n\n${formattedResult}`;
+      }
       
       setOutput(formattedResult);
       
       // Refresh table info
       await refreshTableInfo();
       
-      onStatusChange('Query executed successfully');
+      const timeMsg = executionTimeMs ? `(${executionTimeMs} ms)` : '';
+      onStatusChange(`Query executed successfully ${timeMsg}`);
     } catch (error) {
       console.error('Error executing query:', error);
       setOutput(`Error: ${(error as Error).message}`);

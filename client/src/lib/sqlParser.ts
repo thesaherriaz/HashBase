@@ -5,7 +5,23 @@ import Database from './database';
 
 export async function processQuery(query: string): Promise<any> {
   try {
-    return await Database.executeQuery(query);
+    const result = await Database.executeQuery(query);
+    
+    // Convert execution time to milliseconds points if available
+    if (result && result.executionTime) {
+      // Parse the execution time (format: "Xs Yms")
+      const timeRegex = /(\d+)s\s+(\d+)ms/;
+      const matches = result.executionTime.match(timeRegex);
+      
+      if (matches && matches.length === 3) {
+        const seconds = parseInt(matches[1], 10);
+        const milliseconds = parseInt(matches[2], 10);
+        // Convert to total milliseconds
+        result.executionTimeMs = (seconds * 1000) + milliseconds;
+      }
+    }
+    
+    return result;
   } catch (error) {
     throw new Error(`SQL Error: ${(error as Error).message}`);
   }
@@ -19,7 +35,7 @@ export function parseWhereClause(whereClause: string): Array<{column: string, op
   while ((match = conditionRegex.exec(whereClause)) !== null) {
     const column = match[1].toLowerCase();
     const operator = match[2];
-    let value = match[4];
+    let value: any = match[4];
     
     // Convert value to appropriate type
     if (!isNaN(Number(value))) {

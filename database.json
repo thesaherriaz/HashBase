@@ -70,7 +70,82 @@
       }
     }
   },
-  "activeTransactions": {},
+  "activeTransactions": {
+    "transaction_1747333557292": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "SELECT * FROM students",
+          "timestamp": "2025-05-15T18:26:17.172Z"
+        }
+      ],
+      "locks": []
+    },
+    "transaction_1747333711466": {
+      "status": "active",
+      "operations": [
+        {
+          "query": "SELECT * FROM students",
+          "timestamp": "2025-05-15T18:28:43.158Z"
+        }
+      ],
+      "checkpoint": {
+        "students": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": [
+                "primary_key"
+              ]
+            },
+            "name": {
+              "type": "text",
+              "constraints": []
+            },
+            "age": {
+              "type": "int",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "name": "John",
+              "age": 21
+            },
+            "2": {
+              "id": 2,
+              "name": "Jane",
+              "age": 22
+            },
+            "3": {
+              "id": 3,
+              "name": "Kalsoom",
+              "age": 23
+            },
+            "4": {
+              "id": 4,
+              "name": "Saher",
+              "age": 18
+            },
+            "5": {
+              "id": 5,
+              "name": "Aleena",
+              "age": 21
+            }
+          },
+          "constraints": {},
+          "primary_keys": [
+            "id"
+          ],
+          "foreign_keys": {}
+        }
+      },
+      "locks": [
+        "students"
+      ]
+    }
+  },
   "implicitTransactionCounter": 0,
   "accessControl": {
     "users": {
