@@ -24,40 +24,41 @@ export default function Home() {
             </h1>
           </div>
           
-          {/* Main Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <button 
-              className={`nav-item text-sm font-medium pb-1 
-                ${activeTab === 'query' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              onClick={() => setActiveTab('query')}
-            >
-              SQL Queries
-            </button>
-            <button 
-              className={`nav-item text-sm font-medium pb-1 
-                ${activeTab === 'transaction' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              onClick={() => setActiveTab('transaction')}
-            >
-              Transaction Manager
-            </button>
-            <button 
-              className={`nav-item text-sm font-medium pb-1 
-                ${activeTab === 'join' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              onClick={() => setActiveTab('join')}
-            >
-              Join Operations
-            </button>
-            <button 
-              className={`nav-item text-sm font-medium pb-1 
-                ${activeTab === 'indexer' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
-              onClick={() => setActiveTab('indexer')}
-            >
-              Indexer
-            </button>
-          </nav>
-          
-          {/* Auth */}
-          <div className="flex items-center">
+          {/* Right side navigation and account */}
+          <div className="flex items-center space-x-4">
+            {/* Main Navigation */}
+            <nav className="hidden md:flex items-center space-x-4">
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'query' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('query')}
+              >
+                SQL Queries
+              </button>
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'transaction' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('transaction')}
+              >
+                Transaction Manager
+              </button>
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'join' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('join')}
+              >
+                Join Operations
+              </button>
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'indexer' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('indexer')}
+              >
+                Indexer
+              </button>
+            </nav>
+            
+            {/* Auth */}
             <AccountDropdown setActiveTab={(tab: any) => setActiveTab(tab)} />
           </div>
         </div>
