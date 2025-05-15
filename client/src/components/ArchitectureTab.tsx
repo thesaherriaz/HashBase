@@ -442,17 +442,36 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   <text x="310" y="265" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">SQL Parser</text>
                   <text x="310" y="285" textAnchor="middle" fill="#0f172a" fontSize="10">Syntax Tree</text>
                   
-                  {/* Query Executor */}
-                  <rect x="450" y="240" width="120" height="60" rx="8" fill="#64748b" stroke="#475569" strokeWidth="2"/>
-                  <text x="510" y="275" textAnchor="middle" fill="#f8fafc" fontSize="14" fontWeight="bold">Executor</text>
+                  {/* DBMS Engine */}
+                  <rect x="450" y="240" width="120" height="60" rx="8" fill="#94a3b8" stroke="#64748b" strokeWidth="2"/>
+                  <text x="510" y="265" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">DBMS Engine</text>
+                  <text x="510" y="285" textAnchor="middle" fill="#0f172a" fontSize="10">Query Execution</text>
                   
-                  {/* Storage Manager */}
-                  <rect x="350" y="350" width="120" height="60" rx="8" fill="#475569" stroke="#1e293b" strokeWidth="2"/>
-                  <text x="410" y="385" textAnchor="middle" fill="#f8fafc" fontSize="14" fontWeight="bold">Storage</text>
+                  {/* Transaction Manager */}
+                  <rect x="350" y="340" width="120" height="60" rx="8" fill="#cbd5e1" stroke="#64748b" strokeWidth="2"/>
+                  <text x="410" y="365" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Transactions</text>
+                  <text x="410" y="385" textAnchor="middle" fill="#0f172a" fontSize="10">ACID Properties</text>
+                  
+                  {/* Execution Timer - NEW */}
+                  <rect x="250" y="340" width="80" height="60" rx="8" fill="#cbd5e1" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="290" y="365" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Execution</text>
+                  <text x="290" y="385" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Timer</text>
+                  
+                  {/* Access Control - NEW */}
+                  <rect x="490" y="340" width="80" height="60" rx="8" fill="#cbd5e1" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="530" y="365" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Access</text>
+                  <text x="530" y="385" textAnchor="middle" fill="#0f172a" fontSize="12" fontWeight="bold">Control</text>
+                  
+                  {/* Lock Monitor - NEW */}
+                  <rect x="350" y="430" width="120" height="50" rx="8" fill="#cbd5e1" stroke="#64748b" strokeWidth="2" strokeDasharray="4,2"/>
+                  <text x="410" y="455" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Lock Monitor</text>
+                  <text x="410" y="472" textAnchor="middle" fill="#0f172a" fontSize="8">Transaction Visualization</text>
                   
                   {/* Data Store */}
-                  <circle cx="650" cy="350" r="50" fill="#e2e8f0" stroke="#64748b" strokeWidth="2"/>
-                  <text x="650" y="355" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Data</text>
+                  <path d="M 650,300 L 650,260 Q 650,250 640,250 L 600,250 Q 590,250 590,260 L 590,300 Q 590,310 600,310 L 640,310 Q 650,310 650,300 Z" fill="#f1f5f9" stroke="#64748b" strokeWidth="2"/>
+                  <line x1="590" y1="260" x2="650" y2="260" stroke="#64748b" strokeWidth="1" />
+                  <text x="620" y="275" textAnchor="middle" fill="#0f172a" fontSize="14" fontWeight="bold">Storage</text>
+                  <text x="620" y="295" textAnchor="middle" fill="#0f172a" fontSize="10">JSON + PostgreSQL</text>
                   
                   {/* Arrows */}
                   <defs>
@@ -477,8 +496,23 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   <line x1="510" y1="300" x2="410" y2="350" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
                   <text x="470" y="335" textAnchor="middle" fill="#64748b" fontSize="12">Execute</text>
                   
+                  <line x1="350" y1="270" x2="290" y2="340" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
+                  <text x="310" y="310" textAnchor="middle" fill="#64748b" fontSize="10">Start Timer</text>
+                  
+                  <line x1="330" y1="370" x2="290" y2="370" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
+                  <text x="310" y="355" textAnchor="middle" fill="#64748b" fontSize="10">Record Time</text>
+                  
                   <line x1="470" y1="350" x2="600" y2="350" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
                   <text x="535" y="340" textAnchor="middle" fill="#64748b" fontSize="12">Read/Write</text>
+                  
+                  <line x1="470" y1="370" x2="490" y2="370" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
+                  <text x="480" y="355" textAnchor="middle" fill="#64748b" fontSize="10">Verify</text>
+                  
+                  <line x1="410" y1="400" x2="410" y2="430" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
+                  <text x="420" y="415" textAnchor="middle" fill="#64748b" fontSize="10">Visualize Locks</text>
+                  
+                  <line x1="390" y1="430" x2="310" y2="380" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
+                  <text x="340" y="410" textAnchor="middle" fill="#64748b" fontSize="10">Transaction Time</text>
                   
                   <line x1="650" y1="300" x2="570" y2="240" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
                   <text x="620" y="280" textAnchor="middle" fill="#64748b" fontSize="12">Results</text>
@@ -488,10 +522,19 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   
                   <line x1="250" y1="150" x2="170" y2="150" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
                   <text x="210" y="160" textAnchor="middle" fill="#64748b" fontSize="12">Display</text>
+                  
+                  {/* Legend */}
+                  <rect x="90" y="470" width="15" height="15" rx="2" fill="#cbd5e1" stroke="#64748b" strokeWidth="1"/>
+                  <text x="115" y="482" textAnchor="start" fill="#0f172a" fontSize="10">Core Component</text>
+                  
+                  <rect x="210" y="470" width="15" height="15" rx="2" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" strokeDasharray="4,2"/>
+                  <text x="235" y="482" textAnchor="start" fill="#0f172a" fontSize="10">New Feature</text>
                 </svg>
                 <p className="text-sm text-muted-foreground mt-4">
-                  The data flow diagram illustrates how SQL queries are processed through the system,
-                  from user input through parsing, execution, and storage access, to final display of results.
+                  This updated data flow diagram illustrates how SQL queries are processed through the HashBase DBMS.
+                  New features include the Execution Timer which measures and displays query performance in milliseconds,
+                  the Lock Monitor for visualizing transaction locks, and enhanced Access Control with password verification
+                  for sensitive operations like DELETE and UPDATE.
                 </p>
               </div>
             </CardContent>
