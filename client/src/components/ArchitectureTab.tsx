@@ -27,45 +27,167 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
         <TabsContent value="handdrawn" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>OXIDE DB System Architecture</CardTitle>
+              <CardTitle>HashBase DBMS System Architecture</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="hand-drawn-diagram p-4 bg-muted/30 rounded-lg border-2 border-dashed border-border flex flex-col items-center">
-                <img 
-                  src={sampleArchiDiagram} 
-                  alt="Hand-drawn architecture diagram" 
-                  className="max-w-full rounded-md border border-border shadow-md" 
-                  style={{maxHeight: "600px"}}
-                />
+                <svg width="100%" height="700" viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+                  {/* Background paper effect */}
+                  <rect x="0" y="0" width="1000" height="700" fill="#fdf6e3" stroke="#eee8d5" strokeWidth="3" rx="10" ry="10" />
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#eee8d5" strokeWidth="0.5" />
+                  </pattern>
+                  <rect x="0" y="0" width="1000" height="700" fill="url(#grid)" />
+                  
+                  {/* Title */}
+                  <text x="500" y="40" textAnchor="middle" fontFamily="cursive" fontSize="24" fontWeight="bold" fill="#073642">HashBase DBMS Architecture</text>
+                  
+                  {/* Core Components */}
+                  {/* Database Core */}
+                  <ellipse cx="500" cy="300" rx="220" ry="150" fill="#fdf6e3" stroke="#268bd2" strokeWidth="3" strokeDasharray="5,3" />
+                  <text x="500" y="200" textAnchor="middle" fontFamily="cursive" fontSize="18" fontWeight="bold" fill="#268bd2">Core DBMS Engine</text>
+                  
+                  {/* SQL Parser */}
+                  <rect x="390" y="230" width="100" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#859900" strokeWidth="2" />
+                  <text x="440" y="260" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">SQL Parser</text>
+                  <path d="M 440 280 L 440 310 L 420 330" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
+                  <text x="420" y="340" textAnchor="end" fontFamily="cursive" fontSize="10" fill="#586e75">Parses SQL queries</text>
+                  
+                  {/* Query Optimizer */}
+                  <rect x="510" y="230" width="100" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#859900" strokeWidth="2" />
+                  <text x="560" y="260" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Query Optimizer</text>
+                  <path d="M 560 280 L 560 310 L 580 330" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
+                  <text x="580" y="340" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">Optimizes execution plan</text>
+                  
+                  {/* Finite State Machine */}
+                  <polygon points="450,320 480,290 550,290 580,320 550,350 480,350" fill="#fdf6e3" stroke="#d33682" strokeWidth="2" />
+                  <text x="515" y="330" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Finite State Machine</text>
+                  
+                  {/* Hash Indexer */}
+                  <rect x="330" y="320" width="90" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#cb4b16" strokeWidth="2" />
+                  <text x="375" y="350" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Hash Indexer</text>
+                  <path d="M 375 370 L 375 400 L 355 420" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
+                  <text x="355" y="430" textAnchor="end" fontFamily="cursive" fontSize="10" fill="#586e75">Maintains hash indexes</text>
+                  
+                  {/* Transaction Manager */}
+                  <rect x="580" y="320" width="120" height="50" rx="10" ry="10" fill="#fdf6e3" stroke="#2aa198" strokeWidth="2" />
+                  <text x="640" y="350" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Transaction Manager</text>
+                  <path d="M 640 370 L 640 400 L 670 420" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="2,2" />
+                  <text x="670" y="430" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">Handles ACID properties</text>
+                  
+                  {/* WAL Manager */}
+                  <rect x="500" y="390" width="100" height="40" rx="10" ry="10" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
+                  <text x="550" y="415" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">WAL Manager</text>
+                  
+                  {/* Storage Layer */}
+                  <rect x="250" y="460" width="500" height="40" rx="10" ry="10" fill="#fdf6e3" stroke="#6c71c4" strokeWidth="2" />
+                  <text x="500" y="485" textAnchor="middle" fontFamily="cursive" fontSize="16" fontWeight="bold" fill="#586e75">Storage Layer</text>
+                  
+                  {/* Data Storage */}
+                  <rect x="280" y="520" width="80" height="80" fill="#fdf6e3" stroke="#b58900" strokeWidth="2" />
+                  <rect x="290" y="530" width="80" height="80" fill="#fdf6e3" stroke="#b58900" strokeWidth="2" />
+                  <rect x="300" y="540" width="80" height="80" fill="#fdf6e3" stroke="#b58900" strokeWidth="2" />
+                  <text x="340" y="590" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">JSON Files</text>
+                  
+                  {/* PostgreSQL */}
+                  <g transform="translate(450, 550)">
+                    <path d="M 0,0 C 20,20 60,20 80,0 C 80,40 60,60 40,60 C 20,60 0,40 0,0 Z" fill="#fdf6e3" stroke="#268bd2" strokeWidth="2" />
+                    <text x="40" y="35" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">PostgreSQL</text>
+                  </g>
+                  
+                  {/* User Interface */}
+                  <path d="M 650,550 Q 680,570 710,550 Q 710,590 680,610 Q 650,590 650,550 Z" fill="#fdf6e3" stroke="#cb4b16" strokeWidth="2" />
+                  <text x="680" y="585" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Web UI</text>
+                  
+                  {/* Client */}
+                  <circle cx="100" cy="300" r="60" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
+                  <text x="100" y="305" textAnchor="middle" fontFamily="cursive" fontSize="16" fill="#586e75">Client</text>
+                  
+                  {/* API Server */}
+                  <rect x="200" y="270" width="80" height="60" rx="10" ry="10" fill="#fdf6e3" stroke="#6c71c4" strokeWidth="2" />
+                  <text x="240" y="305" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">API Server</text>
+                  
+                  {/* Access Control */}
+                  <polygon points="150,380 200,380 225,420 175,460 125,420" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
+                  <text x="175" y="425" textAnchor="middle" fontFamily="cursive" fontSize="14" fill="#586e75">Access Control</text>
+                  
+                  {/* Connection Lines */}
+                  <path d="M 160,300 L 200,300" fill="none" stroke="#586e75" strokeWidth="2" strokeDasharray="5,3" />
+                  <text x="180" y="290" textAnchor="middle" fontFamily="cursive" fontSize="10" fill="#586e75">API Requests</text>
+                  
+                  <path d="M 280,300 L 320,300" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <text x="300" y="290" textAnchor="middle" fontFamily="cursive" fontSize="10" fill="#586e75">Query</text>
+                  
+                  <path d="M 240,330 L 240,380 L 225,380" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <text x="230" y="360" textAnchor="middle" fontFamily="cursive" fontSize="10" fill="#586e75">Auth</text>
+                  
+                  <path d="M 175,460 L 175,500 L 250,500" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <text x="200" y="480" textAnchor="middle" fontFamily="cursive" fontSize="10" fill="#586e75">Permissions</text>
+                  
+                  <path d="M 550,430 L 550,460" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <text x="560" y="445" textAnchor="start" fontFamily="cursive" fontSize="10" fill="#586e75">Logs</text>
+                  
+                  <path d="M 500,500 L 500,540" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <path d="M 340,520 L 340,500" fill="none" stroke="#586e75" strokeWidth="2" />
+                  <path d="M 680,550 L 680,500" fill="none" stroke="#586e75" strokeWidth="2" />
+                  
+                  {/* Arrows */}
+                  <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                    <polygon points="0 0, 5 2.5, 0 5" fill="#586e75" />
+                  </marker>
+                  
+                  {/* Legend */}
+                  <rect x="800" y="100" width="150" height="200" fill="#fdf6e3" stroke="#93a1a1" strokeWidth="2" rx="5" ry="5" />
+                  <text x="875" y="120" textAnchor="middle" fontFamily="cursive" fontSize="14" fontWeight="bold" fill="#586e75">Legend</text>
+                  
+                  <rect x="820" y="140" width="15" height="15" fill="#fdf6e3" stroke="#268bd2" strokeWidth="2" />
+                  <text x="845" y="152" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">Core Components</text>
+                  
+                  <rect x="820" y="170" width="15" height="15" fill="#fdf6e3" stroke="#cb4b16" strokeWidth="2" />
+                  <text x="845" y="182" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">Indexer</text>
+                  
+                  <rect x="820" y="200" width="15" height="15" fill="#fdf6e3" stroke="#2aa198" strokeWidth="2" />
+                  <text x="845" y="212" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">Transactions</text>
+                  
+                  <rect x="820" y="230" width="15" height="15" fill="#fdf6e3" stroke="#dc322f" strokeWidth="2" />
+                  <text x="845" y="242" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">Client/Auth</text>
+                  
+                  <rect x="820" y="260" width="15" height="15" fill="#fdf6e3" stroke="#6c71c4" strokeWidth="2" />
+                  <text x="845" y="272" textAnchor="start" fontFamily="cursive" fontSize="12" fill="#586e75">API/Storage</text>
+                </svg>
+                
                 <div className="text-sm text-muted-foreground mt-6 space-y-3 max-w-3xl">
                   <p>
-                    The diagram above illustrates the key components and interactions of our Hash-Based DBMS, 
-                    similar to the OXIDE DB architecture shown. The system is composed of several major components:
+                    The hand-drawn diagram above illustrates the comprehensive architecture of our Hash-Based DBMS.
+                    The system is built with multiple specialized components working in concert to provide efficient database operations.
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
-                      <span className="font-medium">Storage Engine</span> - Manages database files and provides persistent storage
+                      <span className="font-medium">Core DBMS Engine</span> - The central processing unit containing the primary database logic
                     </li>
                     <li>
-                      <span className="font-medium">Query Optimizer</span> - Analyzes and optimizes SQL queries for efficient execution
+                      <span className="font-medium">SQL Parser & Query Optimizer</span> - Converts SQL queries into efficient execution plans
                     </li>
                     <li>
-                      <span className="font-medium">Transaction Manager</span> - Ensures ACID compliance with proper transaction handling
+                      <span className="font-medium">Hash Indexer</span> - Implements hash-based indexing for fast data retrieval
                     </li>
                     <li>
-                      <span className="font-medium">Execution Handler</span> - Processes query execution steps
+                      <span className="font-medium">Transaction Manager</span> - Ensures ACID compliance and transaction isolation
                     </li>
                     <li>
-                      <span className="font-medium">WAL Manager</span> - Handles write-ahead logging for durability
+                      <span className="font-medium">WAL Manager</span> - Implements Write-Ahead Logging for durability and crash recovery
                     </li>
                     <li>
-                      <span className="font-medium">Buffer Pool</span> - Provides memory caching for frequently accessed data
+                      <span className="font-medium">Storage Layer</span> - Abstracts physical storage from the logical database structure
                     </li>
                     <li>
-                      <span className="font-medium">Authorization</span> - Controls user access and permissions
+                      <span className="font-medium">Access Control</span> - Enforces authentication and authorization policies
                     </li>
                     <li>
-                      <span className="font-medium">Heap Parser</span> - Manages raw data structures and parsing
+                      <span className="font-medium">PostgreSQL Integration</span> - Stores user accounts and session data
+                    </li>
+                    <li>
+                      <span className="font-medium">Finite State Machine</span> - Tracks and manages state transitions for database operations
                     </li>
                   </ul>
                 </div>
