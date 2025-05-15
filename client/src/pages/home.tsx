@@ -27,51 +27,37 @@ export default function Home() {
           {/* Main Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <button 
-              className={`nav-item flex items-center text-sm font-medium pb-1 
+              className={`nav-item text-sm font-medium pb-1 
                 ${activeTab === 'query' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => setActiveTab('query')}
             >
-              <MaterialSymbol icon="code" className="mr-1" />
               SQL Queries
             </button>
             <button 
-              className={`nav-item flex items-center text-sm font-medium pb-1 
+              className={`nav-item text-sm font-medium pb-1 
                 ${activeTab === 'transaction' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => setActiveTab('transaction')}
             >
-              <MaterialSymbol icon="sync" className="mr-1" />
               Transaction Manager
             </button>
             <button 
-              className={`nav-item flex items-center text-sm font-medium pb-1 
+              className={`nav-item text-sm font-medium pb-1 
                 ${activeTab === 'join' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => setActiveTab('join')}
             >
-              <MaterialSymbol icon="merge_type" className="mr-1" />
               Join Operations
             </button>
             <button 
-              className={`nav-item flex items-center text-sm font-medium pb-1 
+              className={`nav-item text-sm font-medium pb-1 
                 ${activeTab === 'indexer' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => setActiveTab('indexer')}
             >
-              <MaterialSymbol icon="sort" className="mr-1" />
               Indexer
             </button>
           </nav>
           
-          {/* System Info (visible on large screens) & Auth */}
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center text-xs text-muted-foreground bg-background/50 rounded-full px-3 py-1">
-              <MaterialSymbol icon="memory_alt" className="mr-1" />
-              <span className="hidden xl:inline">In-Memory</span>
-              <span className="mx-1">|</span>
-              <MaterialSymbol icon="key" className="mr-1" />
-              <span className="hidden xl:inline">Hash-based</span>
-              <span className="mx-1">|</span>
-              <MaterialSymbol icon="bolt" className="mr-1" />
-              <span>v1.0</span>
-            </div>
+          {/* Auth */}
+          <div className="flex items-center">
             <AccountDropdown setActiveTab={(tab: any) => setActiveTab(tab)} />
           </div>
         </div>
@@ -93,7 +79,6 @@ export default function Home() {
               ${activeTab === 'query' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('query')}
           >
-            <MaterialSymbol icon="code" className="align-middle mr-1" />
             SQL
           </button>
           <button 
@@ -101,7 +86,6 @@ export default function Home() {
               ${activeTab === 'transaction' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('transaction')}
           >
-            <MaterialSymbol icon="sync" className="align-middle mr-1" />
             Trans.
           </button>
           <button 
@@ -109,7 +93,6 @@ export default function Home() {
               ${activeTab === 'join' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('join')}
           >
-            <MaterialSymbol icon="merge_type" className="align-middle mr-1" />
             Join
           </button>
           <button 
@@ -117,7 +100,6 @@ export default function Home() {
               ${activeTab === 'indexer' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
             onClick={() => setActiveTab('indexer')}
           >
-            <MaterialSymbol icon="sort" className="align-middle mr-1" />
             Index
           </button>
         </div>
