@@ -70,9 +70,11 @@ export class ConcurrencyManager {
     // New lock request
     if (lockType === 'read') {
       // Can get a read lock if no transaction holds a write lock
+      // This allows multiple transactions to have read locks simultaneously
       return !currentLocks.some(lock => lock.type === 'write');
     } else {
       // Can't get a write lock if any other transaction holds any lock
+      // Note: For multi-transaction support, we'll queue these and handle via timeout
       return false;
     }
   }
@@ -111,6 +113,8 @@ export class ConcurrencyManager {
       this.lockQueue.set(lockKey, queue);
       
       // Set a timeout to prevent indefinite waiting (deadlock prevention)
+      // For multi-transaction support, we use a longer timeout
+      // This allows multiple transactions to be active at once, with a queue for each resource
       setTimeout(() => {
         // Remove from queue if still waiting
         const currentQueue = this.lockQueue.get(lockKey) || [];
@@ -124,7 +128,7 @@ export class ConcurrencyManager {
           this.lockQueue.set(lockKey, currentQueue);
           reject(new Error(`Lock acquisition timeout for transaction ${transactionId} on ${lockKey}`));
         }
-      }, 5000); // 5 second timeout
+      }, 10000); // 10 second timeout - longer to support multiple transactions
     });
   }
   

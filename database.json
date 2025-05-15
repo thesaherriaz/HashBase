@@ -18,10 +18,20 @@
         }
       },
       "records": {
+        "1": {
+          "id": 1,
+          "name": "Alice",
+          "age": 21
+        },
         "2": {
           "id": 2,
           "name": "Jane",
           "age": "Doe"
+        },
+        "3": {
+          "id": 3,
+          "name": "Kalsoom",
+          "age": 21
         }
       },
       "constraints": {
@@ -72,7 +82,19 @@
       "foreign_keys": {}
     }
   },
-  "indexes": {},
+  "indexes": {
+    "students": {
+      "age": {
+        "21": [
+          "1",
+          "3"
+        ],
+        "Doe": [
+          "2"
+        ]
+      }
+    }
+  },
   "activeTransactions": {
     "tx1": {
       "status": "committed",
@@ -94,6 +116,114 @@
         {
           "query": "UPDATE employees SET department = \"Sales\" WHERE id = 1",
           "timestamp": "2025-05-15T13:42:36.556Z"
+        }
+      ],
+      "locks": []
+    },
+    "transaction_1747317221222": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "Insert into students values (4, 'Kalsoom', 21)",
+          "timestamp": "2025-05-15T13:54:23.656Z"
+        }
+      ],
+      "locks": []
+    },
+    "transaction_1747317344821": {
+      "status": "active",
+      "operations": [],
+      "checkpoint": {
+        "students": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": [
+                "primary_key"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "constraints": []
+            },
+            "age": {
+              "type": "int",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "name": "Alice",
+              "age": 21
+            },
+            "2": {
+              "id": 2,
+              "name": "Jane",
+              "age": "Doe"
+            },
+            "3": {
+              "id": 3,
+              "name": "Kalsoom",
+              "age": 21
+            }
+          },
+          "constraints": {
+            "primaryKeys": [
+              "id"
+            ]
+          },
+          "primary_keys": [
+            "id"
+          ],
+          "foreign_keys": {}
+        },
+        "employees": {
+          "columns": {
+            "id": {
+              "type": "int",
+              "constraints": []
+            },
+            "first_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "last_name": {
+              "type": "text",
+              "constraints": []
+            },
+            "department": {
+              "type": "text",
+              "constraints": []
+            },
+            "primary": {
+              "type": "key(id",
+              "constraints": []
+            }
+          },
+          "records": {
+            "1": {
+              "id": 1,
+              "first_name": "John",
+              "last_name": "Smith",
+              "department": "Sales"
+            }
+          },
+          "constraints": {
+            "primaryKeys": []
+          },
+          "primary_keys": [],
+          "foreign_keys": {}
+        }
+      },
+      "locks": []
+    },
+    "transaction_1747317358125": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "INSERT INTO students VALUES (4, 'Aleena', 19)",
+          "timestamp": "2025-05-15T13:56:17.146Z"
         }
       ],
       "locks": []

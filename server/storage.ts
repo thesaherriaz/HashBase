@@ -521,11 +521,106 @@ export class MemStorage implements IStorage {
         }
       }
       
-      // Execute the query - in a real implementation, you would parse and execute the SQL
-      // For now, we'll just save the transaction state
+      // Actually execute the query
+      // Parse the query to determine what type it is
+      const queryType = query.trim().split(' ')[0].toUpperCase();
+      let result;
+      
+      if (queryType === 'SELECT') {
+        // Extract table name and columns
+        const match = query.match(/SELECT\s+(.*?)\s+FROM\s+(\w+)(?:\s+WHERE\s+(.*?))?/i);
+        if (!match) {
+          return 'Invalid SELECT query syntax';
+        }
+        
+        const columns = match[1];
+        const tableName = match[2];
+        const whereClause = match[3];
+        
+        result = await this.selectRecords(tableName, columns, whereClause);
+      } 
+      else if (queryType === 'INSERT') {
+        // Extract table name and values
+        const match = query.match(/INSERT\s+INTO\s+(\w+)\s+VALUES\s+\((.*?)\)/i);
+        if (!match) {
+          return 'Invalid INSERT query syntax';
+        }
+        
+        const tableName = match[1];
+        const valuesStr = match[2];
+        const values = valuesStr.split(',').map((val: string) => {
+          val = val.trim();
+          if ((val.startsWith("'") && val.endsWith("'")) || 
+              (val.startsWith('"') && val.endsWith('"'))) {
+            return val.substring(1, val.length - 1);
+          }
+          return isNaN(Number(val)) ? val : Number(val);
+        });
+        
+        // Get table schema to create record object
+        const table = await this.getTable(tableName);
+        if (!table) {
+          return `Table '${tableName}' does not exist!`;
+        }
+        
+        const columns = Object.keys(table.columns);
+        const record: Record<string, any> = {};
+        
+        for (let i = 0; i < Math.min(columns.length, values.length); i++) {
+          record[columns[i]] = values[i];
+        }
+        
+        const key = table.primary_keys.length > 0 ? record[table.primary_keys[0]].toString() : Date.now().toString();
+        result = await this.insertRecord(tableName, key, record);
+      } 
+      else if (queryType === 'UPDATE') {
+        // Extract table name, set clause, and where clause
+        const match = query.match(/UPDATE\s+(\w+)\s+SET\s+(.*?)(?:\s+WHERE\s+(.*?))?$/i);
+        if (!match) {
+          return 'Invalid UPDATE query syntax';
+        }
+        
+        const tableName = match[1];
+        const setClause = match[2];
+        const whereClause = match[3];
+        
+        // Parse SET clause
+        const updates: Record<string, any> = {};
+        const setParts = setClause.split(',').map((part: string) => part.trim());
+        
+        for (const part of setParts) {
+          const [column, valuePart] = part.split('=').map((p: string) => p.trim());
+          
+          let value: any = valuePart;
+          if ((value.startsWith("'") && value.endsWith("'")) || 
+              (value.startsWith('"') && value.endsWith('"'))) {
+            value = value.substring(1, value.length - 1);
+          } else if (!isNaN(Number(value))) {
+            value = Number(value);
+          }
+          
+          updates[column.toLowerCase()] = value;
+        }
+        
+        result = await this.updateRecords(tableName, updates, whereClause);
+      } 
+      else if (queryType === 'DELETE') {
+        // Extract table name and where clause
+        const match = query.match(/DELETE\s+FROM\s+(\w+)(?:\s+WHERE\s+(.*?))?$/i);
+        if (!match) {
+          return 'Invalid DELETE query syntax';
+        }
+        
+        const tableName = match[1];
+        const whereClause = match[2];
+        
+        result = await this.deleteRecords(tableName, whereClause);
+      } else {
+        return `Unsupported query type: ${queryType}`;
+      }
       
       this.save();
-      return "Query executed in transaction";
+      return result || "Query executed in transaction";
       
     } catch (error) {
       // If lock acquisition failed, return the error
