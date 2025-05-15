@@ -4,9 +4,10 @@ import {
   useMutation,
   UseMutationResult,
 } from "@tanstack/react-query";
-import { User } from "@shared/schema";
-import { getQueryFn, apiRequest, queryClient } from "../lib/queryClient";
+import { User, insertUserSchema } from "@shared/schema";
+import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
 
 type AuthContextType = {
   user: User | null;
@@ -22,16 +23,13 @@ type LoginData = {
   password: string;
 };
 
-type RegisterData = {
-  username: string;
-  password: string;
-  role?: string;
-};
+type RegisterData = z.infer<typeof insertUserSchema>;
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+  
   const {
     data: user,
     error,
@@ -39,7 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useQuery<User | null, Error>({
     queryKey: ["/api/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
-    select: (data: User | null | undefined) => data || null,
   });
 
   const loginMutation = useMutation({
@@ -57,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onError: (error: Error) => {
       toast({
         title: "Login failed",
-        description: error.message,
+        description: error.message || "Invalid username or password",
         variant: "destructive",
       });
     },
@@ -78,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onError: (error: Error) => {
       toast({
         title: "Registration failed",
-        description: error.message,
+        description: error.message || "Could not create account",
         variant: "destructive",
       });
     },
@@ -92,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user"], null);
       toast({
         title: "Logged out",
-        description: "You have been logged out successfully.",
+        description: "You have been successfully logged out",
       });
     },
     onError: (error: Error) => {
@@ -107,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: typeof user === 'undefined' ? null : user,
         isLoading,
         error,
         loginMutation,

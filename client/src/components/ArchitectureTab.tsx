@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import sampleArchiDiagram from "@assets/sample-archi-diagram.jpg";
 
 interface ArchitectureTabProps {
   onStatusChange: (status: string) => void;
 }
 
 export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps) {
-  const [activeView, setActiveView] = useState<string>('system');
+  const [activeView, setActiveView] = useState<string>('handdrawn');
   
   useEffect(() => {
     onStatusChange('Viewing system architecture');
@@ -15,12 +16,63 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
 
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="system" className="w-full" value={activeView} onValueChange={setActiveView}>
-        <TabsList className="grid grid-cols-3 mb-6">
+      <Tabs defaultValue="handdrawn" className="w-full" value={activeView} onValueChange={setActiveView}>
+        <TabsList className="grid grid-cols-4 mb-6">
+          <TabsTrigger value="handdrawn">Hand-Drawn Diagram</TabsTrigger>
           <TabsTrigger value="system">System Architecture</TabsTrigger>
           <TabsTrigger value="components">Component Diagram</TabsTrigger>
           <TabsTrigger value="data">Data Flow</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="handdrawn" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>OXIDE DB System Architecture</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="hand-drawn-diagram p-4 bg-muted/30 rounded-lg border-2 border-dashed border-border flex flex-col items-center">
+                <img 
+                  src={sampleArchiDiagram} 
+                  alt="Hand-drawn architecture diagram" 
+                  className="max-w-full rounded-md border border-border shadow-md" 
+                  style={{maxHeight: "600px"}}
+                />
+                <div className="text-sm text-muted-foreground mt-6 space-y-3 max-w-3xl">
+                  <p>
+                    The diagram above illustrates the key components and interactions of our Hash-Based DBMS, 
+                    similar to the OXIDE DB architecture shown. The system is composed of several major components:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-2">
+                    <li>
+                      <span className="font-medium">Storage Engine</span> - Manages database files and provides persistent storage
+                    </li>
+                    <li>
+                      <span className="font-medium">Query Optimizer</span> - Analyzes and optimizes SQL queries for efficient execution
+                    </li>
+                    <li>
+                      <span className="font-medium">Transaction Manager</span> - Ensures ACID compliance with proper transaction handling
+                    </li>
+                    <li>
+                      <span className="font-medium">Execution Handler</span> - Processes query execution steps
+                    </li>
+                    <li>
+                      <span className="font-medium">WAL Manager</span> - Handles write-ahead logging for durability
+                    </li>
+                    <li>
+                      <span className="font-medium">Buffer Pool</span> - Provides memory caching for frequently accessed data
+                    </li>
+                    <li>
+                      <span className="font-medium">Authorization</span> - Controls user access and permissions
+                    </li>
+                    <li>
+                      <span className="font-medium">Heap Parser</span> - Manages raw data structures and parsing
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         <TabsContent value="system" className="space-y-4">
           <Card>
@@ -233,12 +285,11 @@ export default function ArchitectureTab({ onStatusChange }: ArchitectureTabProps
                   <text x="385" y="170" textAnchor="middle" fill="#64748b" fontSize="12">Response</text>
                   
                   <line x1="250" y1="150" x2="170" y2="150" stroke="#64748b" strokeWidth="2" markerEnd="url(#arrowhead-data)"/>
-                  <text x="210" y="170" textAnchor="middle" fill="#64748b" fontSize="12">Results</text>
+                  <text x="210" y="160" textAnchor="middle" fill="#64748b" fontSize="12">Display</text>
                 </svg>
                 <p className="text-sm text-muted-foreground mt-4">
-                  The data flow diagram illustrates how user queries are processed through the system. 
-                  Queries from the UI are sent to the API, parsed into an abstract syntax tree, 
-                  executed by the query engine, and interact with storage before returning results to the user.
+                  The data flow diagram illustrates how SQL queries are processed through the system,
+                  from user input through parsing, execution, and storage access, to final display of results.
                 </p>
               </div>
             </CardContent>
