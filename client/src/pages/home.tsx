@@ -3,6 +3,7 @@ import QueryTab from '@/components/QueryTab';
 import TransactionTab from '@/components/TransactionTab';
 import JoinTab from '@/components/JoinTab';
 import IndexerTab from '@/components/IndexerTab';
+import AuthStatus from '@/components/AuthStatus';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
 
 type Tab = 'query' | 'transaction' | 'join' | 'indexer';
@@ -22,15 +23,18 @@ export default function Home() {
               HashBase <span className="text-primary font-normal">DBMS</span>
             </h1>
           </div>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MaterialSymbol icon="memory_alt" className="mr-1" />
-            <span className="hidden md:inline">In-Memory</span>
-            <span className="mx-2">|</span>
-            <MaterialSymbol icon="key" className="mr-1" />
-            <span className="hidden md:inline">Hash-based</span>
-            <span className="mx-2">|</span>
-            <MaterialSymbol icon="bolt" className="mr-1" />
-            <span>v1.0</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center text-sm text-muted-foreground">
+              <MaterialSymbol icon="memory_alt" className="mr-1" />
+              <span className="hidden md:inline">In-Memory</span>
+              <span className="mx-2">|</span>
+              <MaterialSymbol icon="key" className="mr-1" />
+              <span className="hidden md:inline">Hash-based</span>
+              <span className="mx-2">|</span>
+              <MaterialSymbol icon="bolt" className="mr-1" />
+              <span>v1.0</span>
+            </div>
+            <AuthStatus />
           </div>
         </div>
       </header>

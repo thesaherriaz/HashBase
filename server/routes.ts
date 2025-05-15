@@ -593,6 +593,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  app.get("/api/user", async (req, res) => {
+    try {
+      // Start timer for execution time measurement
+      const startTime = process.hrtime();
+      
+      const user = await storage.getCurrentUser();
+      
+      // Calculate execution time
+      const endTime = process.hrtime(startTime);
+      const executionTime = `${endTime[0]}s ${Math.round(endTime[1] / 1000000)}ms`;
+      
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(401).json({ message: "Not authenticated" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  });
+  
   app.post("/api/login", async (req, res) => {
     try {
       // Start timer for execution time measurement
