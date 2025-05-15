@@ -97,8 +97,17 @@ export type DatabaseSnapshot = typeof databaseSnapshot.$inferSelect;
 
 // Legacy type definitions for our in-memory database engine
 
+// Legacy user type for in-memory storage
+export type LegacyUser = {
+  id: number; // Changed from string to number to match PostgreSQL schema
+  username: string;
+  password: string;
+  role: 'admin' | 'user' | 'readonly';
+  createdAt: Date;
+};
+
 export type AccessControl = {
-  users: Record<string, User>;
+  users: Record<string, LegacyUser>;
   tablePermissions: Record<string, {
     read: string[]; // user IDs who can read
     write: string[]; // user IDs who can write

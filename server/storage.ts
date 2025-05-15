@@ -124,10 +124,11 @@ export class MemStorage implements IStorage {
       console.log('Created default admin user with password:', adminPassword);
       
       this.database.accessControl.users['admin'] = {
-        id: 'admin',
+        id: 1, // Using numeric ID to match PostgreSQL schema
         username: 'admin',
         password: adminPassword,
-        role: 'admin'
+        role: 'admin',
+        createdAt: new Date()
       };
       
       // Create permissions for existing tables
@@ -896,14 +897,32 @@ export class MemStorage implements IStorage {
     const users = this.database.accessControl.users;
     for (const userId in users) {
       if (users[userId].username === username) {
-        return users[userId];
+        // Convert LegacyUser to User
+        const legacyUser = users[userId];
+        return {
+          id: legacyUser.id,
+          username: legacyUser.username,
+          password: legacyUser.password,
+          role: legacyUser.role,
+          createdAt: legacyUser.createdAt
+        };
       }
     }
     return undefined;
   }
 
   async getUser(id: string): Promise<User | undefined> {
-    return this.database.accessControl.users[id];
+    const legacyUser = this.database.accessControl.users[id];
+    if (!legacyUser) return undefined;
+    
+    // Convert LegacyUser to User
+    return {
+      id: legacyUser.id,
+      username: legacyUser.username,
+      password: legacyUser.password,
+      role: legacyUser.role,
+      createdAt: legacyUser.createdAt
+    };
   }
   
   async grantTablePermission(tableName: string, userId: string, permission: 'read' | 'write' | 'admin'): Promise<string> {
