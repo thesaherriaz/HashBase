@@ -79,6 +79,14 @@ export function setupAuth(app: Express) {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
+        // Special case for adbms admin account
+        if (username === 'adbms' && password === 'adbms') {
+          const adminUser = await storage.getUserByUsername('adbms');
+          if (adminUser) {
+            return done(null, adminUser);
+          }
+        }
+        
         // First try PostgreSQL database
         const [user] = await db.select().from(users).where(eq(users.username, username));
         
