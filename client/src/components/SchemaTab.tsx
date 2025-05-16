@@ -33,7 +33,20 @@ interface SchemaTabProps {
 
 export default function SchemaTab({ onStatusChange }: SchemaTabProps) {
   const [activeView, setActiveView] = useState<string>('tables');
-  const { user } = useAuth();
+  // Get user from localStorage instead of useAuth
+  const [user, setUser] = useState<any>(null);
+  
+  // Load user from localStorage
+  useEffect(() => {
+    try {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        setUser(JSON.parse(userJson));
+      }
+    } catch (error) {
+      console.error('Failed to load user from localStorage:', error);
+    }
+  }, []);
   const { toast } = useToast();
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [showAddTableDialog, setShowAddTableDialog] = useState(false);
