@@ -99,10 +99,10 @@
   "implicitTransactionCounter": 0,
   "accessControl": {
     "users": {
-      "adbms": {
-        "id": "adbms",
-        "username": "adbms",
-        "password": "adbms",
+      "admin": {
+        "id": "admin",
+        "username": "admin",
+        "password": "admin123",
         "role": "admin"
       }
     },
