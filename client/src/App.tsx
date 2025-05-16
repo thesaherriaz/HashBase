@@ -7,7 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import AuthPage from "@/pages/auth-page";
+import LoginPage from "@/pages/LoginPage";
 import { Loader2 } from "lucide-react";
 
 // Protected route component
@@ -20,9 +20,9 @@ function ProtectedRoute({
   const [, navigate] = useLocation();
 
   // Use an effect for navigation to avoid the React warning
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoading && !user) {
-      navigate("/auth");
+      navigate("/login");
     }
   }, [user, isLoading, navigate]);
 
@@ -51,7 +51,7 @@ function ProtectedRoute({
 function Router() {
   return (
     <Switch>
-      <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={LoginPage} />
       <Route path="/">
         <ProtectedRoute component={Home} />
       </Route>
