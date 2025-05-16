@@ -314,14 +314,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
         
-        // For DROP TABLE operations, always verify password regardless of admin status
-        const passwordValid = await storage.verifyPassword(password);
-        if (!passwordValid) {
-          return res.status(403).json({ 
-            message: "Access denied: Password verification failed for DROP TABLE operation", 
-            executionTime: `${process.hrtime(startTime)[0]}s ${Math.round(process.hrtime(startTime)[1] / 1000000)}ms` 
-          });
-        }
+        // No password verification for DROP TABLE operations as requested
+        // Only check for admin permission which was already verified above
         
         result = await storage.dropTable(tableName);
       } else {
