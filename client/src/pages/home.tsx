@@ -4,14 +4,17 @@ import TransactionTab from '@/components/TransactionTab';
 import JoinTab from '@/components/JoinTab';
 import IndexerTab from '@/components/IndexerTab';
 import ArchitectureTab from '@/components/ArchitectureTab';
+import SchemaTab from '@/components/SchemaTab';
 import AccountDropdown from '@/components/AccountDropdown';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
+import { useAuth } from '@/hooks/use-auth';
 
-type Tab = 'query' | 'transaction' | 'join' | 'indexer' | 'architecture';
+type Tab = 'query' | 'transaction' | 'join' | 'indexer' | 'architecture' | 'schema';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('query');
   const [statusMessage, setStatusMessage] = useState<string>('Ready');
+  const { user } = useAuth();
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -64,6 +67,13 @@ export default function Home() {
               >
                 Architecture
               </button>
+              <button 
+                className={`nav-item text-sm font-medium pb-1 
+                  ${activeTab === 'schema' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                onClick={() => setActiveTab('schema')}
+              >
+                Schema
+              </button>
             </nav>
             
             {/* Auth */}
@@ -111,6 +121,13 @@ export default function Home() {
           >
             Arch
           </button>
+          <button 
+            className={`tab py-2 px-4 rounded-t-lg font-medium text-sm
+              ${activeTab === 'schema' ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-tab-bg hover:bg-primary/5'}`}
+            onClick={() => setActiveTab('schema')}
+          >
+            Schema
+          </button>
         </div>
         
         {/* Tab content */}
@@ -120,6 +137,7 @@ export default function Home() {
           {activeTab === 'join' && <JoinTab onStatusChange={setStatusMessage} />}
           {activeTab === 'indexer' && <IndexerTab onStatusChange={setStatusMessage} />}
           {activeTab === 'architecture' && <ArchitectureTab onStatusChange={setStatusMessage} />}
+          {activeTab === 'schema' && <SchemaTab onStatusChange={setStatusMessage} />}
         </div>
       </main>
       

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -18,6 +19,13 @@ function ProtectedRoute({
   const { user, isLoading } = useAuth();
   const [, navigate] = useLocation();
 
+  // Use an effect for navigation to avoid the React warning
+  React.useEffect(() => {
+    if (!isLoading && !user) {
+      navigate("/auth");
+    }
+  }, [user, isLoading, navigate]);
+
   // If authentication is still loading, show a loading spinner
   if (isLoading) {
     return (
@@ -27,10 +35,13 @@ function ProtectedRoute({
     );
   }
 
-  // If no user is logged in, redirect to auth page
+  // If no user is logged in, show loading while redirect happens
   if (!user) {
-    navigate("/auth");
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   // If user is logged in, render the component
