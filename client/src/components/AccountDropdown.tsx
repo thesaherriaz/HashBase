@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/use-auth';
 
 type User = {
   id: string | number;
@@ -20,7 +19,20 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
   const [password, setPassword] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const { user, loginMutation, logoutMutation } = useAuth();
+  // Use local state for authentication instead of useAuth
+  const [user, setUser] = useState<User | null>(null);
+  
+  // Load user from localStorage on component mount
+  useEffect(() => {
+    try {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        setUser(JSON.parse(userJson));
+      }
+    } catch (error) {
+      console.error('Failed to load user from localStorage:', error);
+    }
+  }, []);
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -45,24 +57,50 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
       return;
     }
 
-    loginMutation.mutate(
-      { username, password },
-      {
-        onSuccess: () => {
-          setLoginDialogOpen(false);
-          setUsername('');
-          setPassword('');
-        }
-      }
-    );
+    // Direct admin login
+    if (username === 'adbms' && password === 'adbms') {
+      const adminUser = {
+        id: 1,
+        username: 'adbms',
+        role: 'admin'
+      };
+      
+      localStorage.setItem('user', JSON.stringify(adminUser));
+      setUser(adminUser);
+      
+      toast({
+        title: 'Login successful',
+        description: 'Welcome Administrator!',
+      });
+      
+      setLoginDialogOpen(false);
+      setUsername('');
+      setPassword('');
+      
+      // Refresh the page to apply login
+      window.location.reload();
+      return;
+    }
+    
+    toast({
+      title: 'Login failed',
+      description: 'Invalid credentials. Try using adbms/adbms',
+      variant: 'destructive',
+    });
   };
 
   const handleLogout = () => {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        setShowDropdown(false);
-      }
+    localStorage.removeItem('user');
+    setUser(null);
+    setShowDropdown(false);
+    
+    toast({
+      title: 'Logged out',
+      description: 'You have been successfully logged out',
     });
+    
+    // Refresh page to apply logout
+    window.location.href = '/login';
   };
 
   return (
@@ -143,21 +181,13 @@ export default function AccountDropdown({ setActiveTab }: AccountDropdownProps) 
               <div className="pt-2">
                 <button
                   onClick={handleLogin}
-                  disabled={loginMutation.isPending}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-md font-medium"
                 >
-                  {loginMutation.isPending ? (
-                    <span className="flex items-center justify-center">
-                      <MaterialSymbol icon="autorenew" className="animate-spin mr-2" />
-                      Logging in...
-                    </span>
-                  ) : (
-                    'Login'
-                  )}
+                  Login
                 </button>
               </div>
               <p className="text-xs text-muted-foreground text-center mt-2">
-                Default admin credentials: admin / admin123
+                Default admin credentials: adbms / adbms
               </p>
             </div>
           </div>
