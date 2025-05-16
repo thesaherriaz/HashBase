@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QueryTab from '@/components/QueryTab';
 import TransactionTab from '@/components/TransactionTab';
 import JoinTab from '@/components/JoinTab';
@@ -7,14 +7,25 @@ import ArchitectureTab from '@/components/ArchitectureTab';
 import SchemaTab from '@/components/SchemaTab';
 import AccountDropdown from '@/components/AccountDropdown';
 import { MaterialSymbol } from '@/components/ui/material-symbol';
-import { useAuth } from '@/hooks/use-auth';
 
 type Tab = 'query' | 'transaction' | 'join' | 'indexer' | 'architecture' | 'schema';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('query');
   const [statusMessage, setStatusMessage] = useState<string>('Ready');
-  const { user } = useAuth();
+  const [user, setUser] = useState<any>(null);
+  
+  // Load user from localStorage on component mount
+  useEffect(() => {
+    try {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        setUser(JSON.parse(userJson));
+      }
+    } catch (error) {
+      console.error('Failed to load user from localStorage:', error);
+    }
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
