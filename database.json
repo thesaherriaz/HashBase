@@ -1,6 +1,6 @@
 {
   "tables": {
-    "students": {
+    "employees": {
       "columns": {
         "id": {
           "type": "int",
@@ -9,7 +9,7 @@
           ]
         },
         "name": {
-          "type": "text",
+          "type": "string",
           "constraints": []
         },
         "age": {
@@ -20,56 +20,22 @@
       "records": {
         "1": {
           "id": 1,
-          "name": "John",
-          "age": 21
-        },
-        "2": {
-          "id": 2,
-          "name": "Jane",
-          "age": 22
-        },
-        "3": {
-          "id": 3,
-          "name": "Kalsoom",
-          "age": 23
-        },
-        "4": {
-          "id": 4,
           "name": "Saher",
-          "age": 18
-        },
-        "5": {
-          "id": 5,
-          "name": "Aleena",
           "age": 21
         }
       },
-      "constraints": {},
+      "constraints": {
+        "primaryKeys": [
+          "id"
+        ]
+      },
       "primary_keys": [
         "id"
       ],
       "foreign_keys": {}
     }
   },
-  "indexes": {
-    "students": {
-      "age": {
-        "18": [
-          "4"
-        ],
-        "21": [
-          "1",
-          "5"
-        ],
-        "22": [
-          "2"
-        ],
-        "23": [
-          "3"
-        ]
-      }
-    }
-  },
+  "indexes": {},
   "activeTransactions": {
     "transaction_1747333557292": {
       "status": "committed",
@@ -82,68 +48,52 @@
       "locks": []
     },
     "transaction_1747333711466": {
-      "status": "active",
+      "status": "committed",
       "operations": [
         {
           "query": "SELECT * FROM students",
           "timestamp": "2025-05-15T18:28:43.158Z"
+        },
+        {
+          "query": "select * from students",
+          "timestamp": "2025-05-16T19:58:49.025Z"
         }
       ],
-      "checkpoint": {
-        "students": {
-          "columns": {
-            "id": {
-              "type": "int",
-              "constraints": [
-                "primary_key"
-              ]
-            },
-            "name": {
-              "type": "text",
-              "constraints": []
-            },
-            "age": {
-              "type": "int",
-              "constraints": []
-            }
-          },
-          "records": {
-            "1": {
-              "id": 1,
-              "name": "John",
-              "age": 21
-            },
-            "2": {
-              "id": 2,
-              "name": "Jane",
-              "age": 22
-            },
-            "3": {
-              "id": 3,
-              "name": "Kalsoom",
-              "age": 23
-            },
-            "4": {
-              "id": 4,
-              "name": "Saher",
-              "age": 18
-            },
-            "5": {
-              "id": 5,
-              "name": "Aleena",
-              "age": 21
-            }
-          },
-          "constraints": {},
-          "primary_keys": [
-            "id"
-          ],
-          "foreign_keys": {}
+      "locks": []
+    },
+    "transaction_1747425339326": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "DROP TABLE students",
+          "timestamp": "2025-05-16T19:55:43.904Z"
+        },
+        {
+          "query": "Insert into employees name = 'aleena' where id = 2",
+          "timestamp": "2025-05-16T19:56:29.316Z"
         }
-      },
-      "locks": [
-        "students"
-      ]
+      ],
+      "locks": []
+    },
+    "transaction_1747425406641": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "insert into employees where if = 2 values(1, 'aleena', 19)",
+          "timestamp": "2025-05-16T19:57:29.185Z"
+        }
+      ],
+      "locks": []
+    },
+    "transaction_1747425472487": {
+      "status": "committed",
+      "operations": [
+        {
+          "query": "INSERT INTO employees VALUES (2, 'aleena', 21)",
+          "timestamp": "2025-05-16T19:58:10.333Z"
+        }
+      ],
+      "locks": []
     }
   },
   "implicitTransactionCounter": 0,

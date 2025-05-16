@@ -561,10 +561,12 @@ export class MemStorage implements IStorage {
     try {
       // Parse the query to determine the required locks
       // This is a simplified implementation - in a real system you would properly parse the SQL
-      const isWriteOperation = /INSERT|UPDATE|DELETE|CREATE|DROP|ALTER/i.test(query);
+      const isDrop = /DROP\s+TABLE/i.test(query);
+      const isWriteOperation = /INSERT|UPDATE|DELETE|CREATE|ALTER/i.test(query);
       const tableName = this.extractTableName(query);
       
-      if (tableName) {
+      // Skip lock acquisition for DROP TABLE operations
+      if (tableName && !isDrop) {
         // Acquire the appropriate lock (read or write)
         const lockType = isWriteOperation ? 'write' : 'read';
         
