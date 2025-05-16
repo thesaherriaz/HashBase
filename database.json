@@ -109,16 +109,27 @@
     "tablePermissions": {
       "students": {
         "read": [
-          "admin"
+          "adbms"
         ],
         "write": [
-          "admin"
+          "adbms"
         ],
         "admin": [
-          "admin"
+          "adbms"
+        ]
+      },
+      "employees": {
+        "read": [
+          "adbms"
+        ],
+        "write": [
+          "adbms"
+        ],
+        "admin": [
+          "adbms"
         ]
       }
     },
-    "currentUser": "admin"
+    "currentUser": "adbms"
   }
 }
