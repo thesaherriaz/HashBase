@@ -4,7 +4,6 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import LoginPage from "@/pages/LoginPage";
@@ -16,15 +15,34 @@ function ProtectedRoute({
 }: { 
   component: React.ComponentType 
 }) {
-  const { user, isLoading } = useAuth();
   const [, navigate] = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Use an effect for navigation to avoid the React warning
   useEffect(() => {
-    if (!isLoading && !user) {
-      navigate("/login");
-    }
-  }, [user, isLoading, navigate]);
+    // Check if user is logged in via localStorage
+    const checkAuth = () => {
+      try {
+        const userString = localStorage.getItem('user');
+        if (userString) {
+          const user = JSON.parse(userString);
+          if (user && user.username) {
+            setIsAuthenticated(true);
+          } else {
+            navigate("/login");
+          }
+        } else {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        navigate("/login");
+      }
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   // If authentication is still loading, show a loading spinner
   if (isLoading) {
@@ -35,8 +53,8 @@ function ProtectedRoute({
     );
   }
 
-  // If no user is logged in, show loading while redirect happens
-  if (!user) {
+  // If not authenticated, show loading while redirect happens
+  if (!isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -63,12 +81,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

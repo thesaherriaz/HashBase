@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage() {
+export default function SimpleLogin() {
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -44,9 +42,9 @@ export default function LoginPage() {
         description: "Welcome Administrator!",
       });
       
-      // Navigate to dashboard
+      // Navigate to dashboard by refreshing the page
       setTimeout(() => {
-        setLocation("/");
+        window.location.href = "/";
       }, 500);
       
       return;

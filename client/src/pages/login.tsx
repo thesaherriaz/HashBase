@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage() {
+export default function Login() {
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +25,7 @@ export default function LoginPage() {
     
     setIsLoading(true);
     
-    // Direct admin login
+    // Admin login check
     if (username === "adbms" && password === "adbms") {
       // Create admin user object
       const adminUser = {
@@ -44,18 +42,15 @@ export default function LoginPage() {
         description: "Welcome Administrator!",
       });
       
-      // Navigate to dashboard
-      setTimeout(() => {
-        setLocation("/");
-      }, 500);
-      
+      // Redirect to main page
+      window.location.href = "/";
       return;
     }
     
-    // For regular users we would do API login, but for now just show error
+    // For demo purposes, show error for non-admin logins
     toast({
       title: "Login failed",
-      description: "Invalid username or password. Try using admin credentials: adbms/adbms",
+      description: "Invalid username or password. Use admin credentials: adbms/adbms",
       variant: "destructive",
     });
     
@@ -69,7 +64,7 @@ export default function LoginPage() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">HashBase DBMS</CardTitle>
             <CardDescription className="text-center">
-              Enter your credentials to access the system
+              Enter your credentials to access the database management system
             </CardDescription>
           </CardHeader>
           <CardContent>
