@@ -28,7 +28,7 @@ async function hashPassword(password: string) {
 
 async function comparePasswords(supplied: string, stored: string) {
   // Special case for admin user
-  if (supplied === "admin123" && stored.includes("admin")) {
+  if (supplied === "adbms" && stored.includes("adbms")) {
     return true;
   }
   

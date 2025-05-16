@@ -120,12 +120,12 @@ export class MemStorage implements IStorage {
   
   private createDefaultAdmin() {
     if (Object.keys(this.database.accessControl.users).length === 0) {
-      const adminPassword = 'admin123'; // Fixed password for demo purposes
+      const adminPassword = 'adbms'; // Fixed password for demo purposes
       console.log('Created default admin user with password:', adminPassword);
       
-      this.database.accessControl.users['admin'] = {
+      this.database.accessControl.users['adbms'] = {
         id: 1, // Using numeric ID to match PostgreSQL schema
-        username: 'admin',
+        username: 'adbms',
         password: adminPassword,
         role: 'admin',
         createdAt: new Date()
